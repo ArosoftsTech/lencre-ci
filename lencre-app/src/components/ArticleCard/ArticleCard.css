@@ -1,0 +1,174 @@
+/* ==========================================================================
+   ArticleCard — L'Encre
+   ========================================================================== */
+
+.article-card {
+  background-color: var(--blanc-casse);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  transition: all var(--transition-normal);
+  height: 100%;
+}
+
+.article-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-hover);
+}
+
+.article-card__link {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  color: inherit;
+}
+
+.article-card__link:hover {
+  color: inherit;
+}
+
+/* --------------------------------------------------------------------------
+   Image
+   -------------------------------------------------------------------------- */
+.article-card__image-wrapper {
+  position: relative;
+  width: 100%;
+  padding-top: 56.25%; /* 16:9 ratio */
+  overflow: hidden;
+  background-color: #ddd;
+}
+
+.article-card__image {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform var(--transition-slow);
+}
+
+.article-card:hover .article-card__image {
+  transform: scale(1.03);
+}
+
+/* Badge rubrique */
+.article-card__badge {
+  position: absolute;
+  top: var(--space-sm);
+  left: var(--space-sm);
+  z-index: 2;
+}
+
+.article-card__badge-urgent {
+  position: absolute;
+  top: var(--space-sm);
+  right: var(--space-sm);
+  z-index: 2;
+}
+
+/* --------------------------------------------------------------------------
+   Contenu
+   -------------------------------------------------------------------------- */
+.article-card__content {
+  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  gap: var(--space-sm);
+}
+
+.article-card__title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--fs-md);
+  color: var(--text-primary);
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.article-card__excerpt {
+  font-family: var(--font-body);
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.article-card__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-top: auto;
+  padding-top: var(--space-sm);
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
+  flex-wrap: wrap;
+}
+
+.article-card__author {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-xs);
+  color: var(--bleu-nuit);
+}
+
+.article-card__date {
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+}
+
+/* --------------------------------------------------------------------------
+   Variants
+   -------------------------------------------------------------------------- */
+
+/* Compact (utilisé dans Mon Griot) */
+.article-card--compact .article-card__content {
+  padding: var(--space-sm) var(--space-md) var(--space-md);
+}
+
+.article-card--compact .article-card__title {
+  font-size: var(--fs-sm);
+  -webkit-line-clamp: 2;
+}
+
+.article-card--compact .article-card__meta {
+  font-size: 0.6875rem;
+}
+
+/* Hero (article principal) */
+.article-card--hero .article-card__title {
+  font-size: var(--fs-xl);
+}
+
+.article-card--hero .article-card__excerpt {
+  -webkit-line-clamp: 3;
+  font-size: var(--fs-base);
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .article-card__content {
+    padding: var(--space-sm) var(--space-md) var(--space-md);
+  }
+
+  .article-card__title {
+    font-size: var(--fs-base);
+  }
+
+  .article-card--hero .article-card__title {
+    font-size: var(--fs-lg);
+  }
+
+  .article-card__meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

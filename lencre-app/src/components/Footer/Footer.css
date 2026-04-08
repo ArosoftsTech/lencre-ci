@@ -1,0 +1,178 @@
+/* ==========================================================================
+   Footer — L'Encre
+   ========================================================================== */
+
+.footer {
+  background-color: var(--bg-white, #ffffff);
+  border-top: 1px solid var(--border-light, #eaeaea);
+  padding: var(--space-3xl) 0 var(--space-xl);
+  margin-top: auto;
+  color: var(--bleu-nuit);
+}
+
+.footer__grid {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1.5fr 1.5fr;
+  gap: var(--space-2xl);
+  margin-bottom: var(--space-2xl);
+}
+
+/* Logo & Desc */
+.footer__logo {
+  display: flex;
+  align-items: center;
+  margin-bottom: var(--space-md);
+  text-decoration: none;
+}
+
+.footer__logo-img {
+  max-height: 50px;
+  width: auto;
+  object-fit: contain;
+}
+
+.footer__description {
+  font-size: var(--fs-sm);
+  color: var(--text-muted, #666);
+  line-height: 1.6;
+}
+
+/* Columns */
+.footer__col-title {
+  font-family: var(--font-heading);
+  font-size: var(--fs-base);
+  font-weight: 700;
+  color: var(--bleu-nuit);
+  margin-bottom: var(--space-md);
+  text-transform: capitalize;
+}
+
+.footer__menu {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.footer__link {
+  color: var(--text-muted, #666);
+  font-size: var(--fs-sm);
+  transition: color var(--transition-fast);
+  text-decoration: none;
+}
+
+.footer__link:hover {
+  color: var(--bleu-nuit);
+  text-decoration: underline;
+}
+
+/* Newsletter */
+.footer__newsletter-desc {
+  font-size: var(--fs-sm);
+  color: var(--text-muted, #666);
+  margin-bottom: var(--space-md);
+}
+
+.footer__newsletter-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.footer__input {
+  padding: 0.625rem 1rem;
+  border: 1px solid var(--border-light, #eaeaea);
+  border-radius: 4px;
+  font-size: var(--fs-sm);
+  font-family: inherit;
+  background-color: #f9f9f9;
+  width: 100%;
+}
+
+.footer__input:focus {
+  outline: none;
+  border-color: var(--bleu-nuit);
+}
+
+.footer__btn {
+  background-color: var(--jaune-dynamique);
+  color: var(--bleu-nuit);
+  border: none;
+  padding: 0.625rem 1rem;
+  border-radius: 4px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  width: 100%;
+  text-align: center;
+}
+
+.footer__btn:hover {
+  background-color: #edbb00;
+  transform: translateY(-1px);
+}
+
+/* Socials */
+.footer__socials {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+}
+
+.footer__social-link {
+  color: var(--text-muted, #666);
+  transition: color var(--transition-fast);
+  display: flex;
+  align-items: center;
+}
+
+.footer__social-link:hover {
+  color: var(--bleu-nuit);
+}
+
+/* Bottom Copyright */
+.footer__bottom {
+  text-align: center;
+  padding-top: var(--space-xl);
+  border-top: 1px solid var(--border-light, #eaeaea);
+}
+
+.footer__copyright {
+  color: var(--text-muted, #666);
+  font-size: 0.8125rem;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .footer__grid {
+    grid-template-columns: 1fr 1fr;
+    row-gap: var(--space-2xl);
+  }
+}
+
+@media (max-width: 600px) {
+  .footer__grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .footer__logo {
+    justify-content: center;
+  }
+  
+  .footer__col {
+    text-align: center;
+  }
+  
+  .footer__menu {
+    align-items: center;
+  }
+  
+  .footer__socials {
+    justify-content: center;
+  }
+}

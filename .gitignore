@@ -1,0 +1,18 @@
+# Ignore editor data
+.vscode/
+.idea/
+.claude/
+
+# Ignore big archives and binaries
+redis.zip
+redis_bin/
+
+# Ignore python env
+lencre-ai-service/venv/
+lencre-ai-service/__pycache__/
+*.pyc
+
+# Keep other ignores separated in their respective folders
+
+**/.env
+.env

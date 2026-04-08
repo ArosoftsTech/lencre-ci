@@ -1,0 +1,147 @@
+.author-page {
+  padding-bottom: 4rem;
+}
+
+/* En-tête de l'auteur */
+.author-page__header {
+  padding: 3rem 0;
+  margin-bottom: 3rem;
+  background-color: var(--blanc-casse);
+  border-radius: var(--radius-md);
+  margin-top: 2rem;
+}
+
+.author-page__profile {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0 2rem;
+}
+
+.author-page__avatar {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  background-color: var(--bleu-nuit);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.author-page__avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.author-page__initials {
+  font-family: var(--font-titre);
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.author-page__info {
+  display: flex;
+  flex-direction: column;
+}
+
+.author-page__name {
+  font-family: var(--font-titre);
+  font-size: 2.5rem;
+  font-weight: 900;
+  color: var(--bleu-nuit);
+  margin-bottom: 0.25rem;
+}
+
+.author-page__role {
+  font-family: var(--font-corps);
+  color: var(--rouge-profond);
+  font-weight: 600;
+  font-size: 1.125rem;
+  margin-bottom: 0.5rem;
+}
+
+.author-page__stats {
+  font-family: var(--font-corps);
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+@media (max-width: 640px) {
+  .author-page__profile {
+    flex-direction: column;
+    text-align: center;
+  }
+}
+
+/* Section Articles */
+.author-page__section-title {
+  font-family: var(--font-titre);
+  font-size: 1.75rem;
+  color: var(--bleu-nuit);
+  margin-bottom: 2rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 2px solid #e2e8f0;
+}
+
+/* Grille d'articles */
+.author-page__grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+@media (min-width: 768px) {
+  .author-page__grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .author-page__grid {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+/* Pagination simulée */
+.author-page__pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  padding-top: 2rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.author-page__btn {
+  padding: 0.5rem 1rem;
+  background-color: transparent;
+  border: 1px solid var(--bleu-nuit);
+  color: var(--bleu-nuit);
+  font-family: var(--font-titre);
+  font-weight: 600;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.author-page__btn:hover:not(:disabled) {
+  background-color: var(--bleu-nuit);
+  color: white;
+}
+
+.author-page__btn:disabled {
+  border-color: #cbd5e1;
+  color: #cbd5e1;
+  cursor: not-allowed;
+}
+
+.author-page__page-info {
+  font-family: var(--font-corps);
+  font-size: 0.875rem;
+  color: #64748b;
+}

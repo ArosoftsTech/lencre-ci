@@ -1,0 +1,97 @@
+/* ==========================================================================
+   BreakingNewsTicker — L'Encre
+   ========================================================================== */
+
+.ticker {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 900;
+  background-color: var(--rouge-profond);
+  display: flex;
+  align-items: stretch;
+  height: 40px;
+  overflow: hidden;
+}
+
+.ticker__label {
+  background-color: var(--jaune-dynamique);
+  color: var(--bleu-nuit);
+  font-family: var(--font-heading);
+  font-weight: 800;
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 0 var(--space-lg);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.ticker__label svg {
+  color: var(--bleu-nuit);
+}
+
+.ticker__track {
+  flex: 1;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+}
+
+.ticker__content {
+  display: flex;
+  align-items: center;
+  white-space: nowrap;
+  animation: ticker-scroll 45s linear infinite;
+}
+
+.ticker__item {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  font-size: var(--fs-sm);
+  color: var(--text-white);
+  padding: 0 var(--space-md);
+}
+
+.ticker__separator {
+  color: var(--jaune-dynamique);
+  margin-left: var(--space-md);
+  font-size: var(--fs-lg);
+}
+
+/* Animation de défilement */
+@keyframes ticker-scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+/* Pause au survol */
+.ticker:hover .ticker__content {
+  animation-play-state: paused;
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 768px) {
+  .ticker {
+    height: 36px;
+  }
+
+  .ticker__label {
+    padding: 0 var(--space-md);
+    font-size: 0.625rem;
+  }
+
+  .ticker__item {
+    font-size: var(--fs-xs);
+  }
+}

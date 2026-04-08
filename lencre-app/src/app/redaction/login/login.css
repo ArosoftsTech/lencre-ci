@@ -1,0 +1,117 @@
+.redaction-login {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0D1B2A 0%, #1B2838 50%, #0D1B2A 100%);
+  padding: 1rem;
+}
+
+.redaction-login__card {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  padding: 3rem;
+  width: 100%;
+  max-width: 420px;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.4);
+}
+
+.redaction-login__header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.redaction-login__logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #fff;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  margin: 0 auto 1rem;
+  width: fit-content;
+}
+
+.redaction-login__logo-img {
+  max-width: 100%;
+  height: 50px;
+  object-fit: contain;
+}
+
+.redaction-login__subtitle {
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+}
+
+.redaction-login__form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.redaction-login__error {
+  background: rgba(193, 18, 31, 0.15);
+  border: 1px solid rgba(193, 18, 31, 0.4);
+  color: #ff6b6b;
+  padding: 0.75rem 1rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+}
+
+.redaction-login__field label {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.8rem;
+  margin-bottom: 0.4rem;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.redaction-login__field input {
+  width: 100%;
+  padding: 0.85rem 1rem;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 8px;
+  color: #fff;
+  font-size: 0.95rem;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  outline: none;
+}
+
+.redaction-login__field input:focus {
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(193, 18, 31, 0.2);
+}
+
+.redaction-login__field input::placeholder {
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.redaction-login__submit {
+  padding: 0.85rem;
+  background: #3b82f6;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+  margin-top: 0.5rem;
+}
+
+.redaction-login__submit:hover:not(:disabled) {
+  background: #2563eb;
+  transform: translateY(-1px);
+}
+
+.redaction-login__submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

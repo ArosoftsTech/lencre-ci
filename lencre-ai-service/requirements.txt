@@ -1,0 +1,13 @@
+fastapi
+uvicorn[standard]
+celery
+redis
+python-dotenv
+requests
+pydantic
+openai
+langchain
+langchain-openai
+tavily-python
+langdetect
+eventlet

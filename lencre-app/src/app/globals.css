@@ -1,0 +1,328 @@
+/* ==========================================================================
+   L'Encre — Design System Global
+   Site de presse en ligne — www.lencre.ci
+   ========================================================================== */
+
+/* Google Fonts import */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800&family=Roboto:wght@300;400;500&display=swap');
+
+/* --------------------------------------------------------------------------
+   CSS Custom Properties (Design Tokens)
+   -------------------------------------------------------------------------- */
+:root {
+  /* Couleurs principales */
+  --rouge-profond: #C1121F;
+  --bleu-nuit: #1D3557;
+  --bleu-nuit-dark: #16293f;
+  --jaune-dynamique: #FFB703;
+  --blanc-casse: #F1FAEE;
+
+  /* Couleurs texte */
+  --text-primary: #1a1a1a;
+  --text-body: #333333;
+  --text-muted: #6b7280;
+  --text-white: #ffffff;
+  --text-on-dark: #e5e7eb;
+
+  /* Typographie */
+  --font-heading: 'Montserrat', sans-serif;
+  --font-body: 'Roboto', 'Open Sans', sans-serif;
+
+  /* Tailles de police */
+  --fs-xs: 0.75rem;    /* 12px */
+  --fs-sm: 0.875rem;   /* 14px */
+  --fs-base: 1rem;     /* 16px */
+  --fs-md: 1.125rem;   /* 18px */
+  --fs-lg: 1.25rem;    /* 20px */
+  --fs-xl: 1.5rem;     /* 24px */
+  --fs-2xl: 1.875rem;  /* 30px */
+  --fs-3xl: 2.25rem;   /* 36px */
+  --fs-4xl: 3rem;      /* 48px */
+
+  /* Espacements */
+  --space-xs: 0.25rem;
+  --space-sm: 0.5rem;
+  --space-md: 1rem;
+  --space-lg: 1.5rem;
+  --space-xl: 2rem;
+  --space-2xl: 3rem;
+  --space-3xl: 4rem;
+
+  /* Bordures */
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+  --radius-xl: 12px;
+
+  /* Ombres */
+  --shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.08);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  --shadow-hover: 0 12px 32px rgba(0, 0, 0, 0.15);
+
+  /* Transitions */
+  --transition-fast: 150ms ease;
+  --transition-normal: 250ms ease;
+  --transition-slow: 400ms ease;
+
+  /* Layout */
+  --max-width: 1280px;
+  --header-height: 120px;
+  --header-height-mobile: 60px;
+}
+
+/* --------------------------------------------------------------------------
+   CSS Reset & Base Styles
+   -------------------------------------------------------------------------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  font-family: var(--font-body);
+  font-size: var(--fs-base);
+  line-height: 1.6;
+  color: var(--text-body);
+  background-color: var(--blanc-casse);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+  transition: color var(--transition-fast);
+}
+
+a:hover {
+  color: var(--rouge-profond);
+}
+
+ul, ol {
+  list-style: none;
+}
+
+button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-family: inherit;
+}
+
+input, textarea, select {
+  font-family: inherit;
+  font-size: inherit;
+}
+
+/* --------------------------------------------------------------------------
+   Typography Utility Classes
+   -------------------------------------------------------------------------- */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  color: var(--text-primary);
+  line-height: 1.2;
+}
+
+h1 { font-size: var(--fs-3xl); }
+h2 { font-size: var(--fs-2xl); }
+h3 { font-size: var(--fs-xl); }
+h4 { font-size: var(--fs-lg); }
+
+@media (max-width: 768px) {
+  h1 { font-size: var(--fs-2xl); }
+  h2 { font-size: var(--fs-xl); }
+  h3 { font-size: var(--fs-lg); }
+}
+
+/* --------------------------------------------------------------------------
+   Button Styles
+   -------------------------------------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  border-radius: var(--radius-md);
+  transition: all var(--transition-normal);
+  min-height: 44px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+
+.btn-primary {
+  background-color: var(--jaune-dynamique);
+  color: var(--bleu-nuit);
+}
+
+.btn-primary:hover {
+  background-color: #e5a503;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  color: var(--bleu-nuit);
+}
+
+.btn-secondary {
+  background-color: var(--bleu-nuit);
+  color: var(--text-white);
+}
+
+.btn-secondary:hover {
+  background-color: var(--bleu-nuit-dark);
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-md);
+  color: var(--text-white);
+}
+
+.link-text {
+  color: var(--rouge-profond);
+  background: none;
+  padding: 0;
+  font-weight: 600;
+  transition: all var(--transition-fast);
+}
+
+.link-text:hover {
+  text-decoration: underline;
+  color: var(--rouge-profond);
+}
+
+/* --------------------------------------------------------------------------
+   Container
+   -------------------------------------------------------------------------- */
+.container {
+  width: 100%;
+  max-width: var(--max-width);
+  margin: 0 auto;
+  padding: 0 var(--space-lg);
+}
+
+@media (max-width: 768px) {
+  .container {
+    padding: 0 var(--space-md);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Section Titles
+   -------------------------------------------------------------------------- */
+.section-title {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--fs-xl);
+  color: var(--text-primary);
+  padding-bottom: var(--space-sm);
+  margin-bottom: var(--space-lg);
+  position: relative;
+}
+
+.section-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 60px;
+  height: 3px;
+  background-color: var(--rouge-profond);
+  border-radius: 2px;
+}
+
+.section-title--light {
+  color: var(--text-white);
+}
+
+.section-title--light::after {
+  background-color: var(--jaune-dynamique);
+}
+
+/* --------------------------------------------------------------------------
+   Badge
+   -------------------------------------------------------------------------- */
+.badge {
+  display: inline-block;
+  padding: 4px 10px;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--fs-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border-radius: var(--radius-sm);
+  color: var(--text-white);
+}
+
+.badge--rouge {
+  background-color: var(--rouge-profond);
+}
+
+.badge--bleu {
+  background-color: var(--bleu-nuit);
+}
+
+.badge--jaune {
+  background-color: var(--jaune-dynamique);
+  color: var(--bleu-nuit);
+}
+
+/* --------------------------------------------------------------------------
+   Visually Hidden (Accessibility)
+   -------------------------------------------------------------------------- */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* --------------------------------------------------------------------------
+   Focus Styles (Accessibility)
+   -------------------------------------------------------------------------- */
+:focus-visible {
+  outline: 2px solid var(--jaune-dynamique);
+  outline-offset: 2px;
+}
+
+/* --------------------------------------------------------------------------
+   Scrollbar
+   -------------------------------------------------------------------------- */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--blanc-casse);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--bleu-nuit);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--rouge-profond);
+}
