@@ -12,7 +12,12 @@ type Props = {
 
 // Génération dynamique des métadonnées (SEO)
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const article = await getArticleBySlug(params.slug);
+  let article = null;
+  try {
+    article = await getArticleBySlug(params.slug);
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'article pour les métadonnées:", error);
+  }
 
   if (!article || article.category.slug !== params.category) {
     return { title: "Article introuvable — L'Encre" };
@@ -29,7 +34,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 
 export default async function ArticlePage({ params }: Props) {
   // 1. Récupérer l'article concerné
-  const article = await getArticleBySlug(params.slug);
+  let article = null;
+  try {
+    article = await getArticleBySlug(params.slug);
+  } catch (error) {
+    console.error("Erreur lors de la récupération de l'article:", error);
+  }
 
   // 2. Erreur 404 si non trouvé ou si l'URL /categorie/ ne match pas sa vraie catégorie
   if (!article || article.category.slug !== params.category) {
@@ -37,7 +47,16 @@ export default async function ArticlePage({ params }: Props) {
   }
 
   // 3. Articles recommandés (les plus lus / tendances) pour la sidebar
-  let trendingArticles = await getTrendingArticles();
+  let trendingArticles: any[] = [];
+  try {
+    const rawTrending = await getTrendingArticles();
+    if (rawTrending && Array.isArray(rawTrending)) {
+      trendingArticles = rawTrending;
+    }
+  } catch (error) {
+    console.error("Erreur lors de la récupération des articles tendances:", error);
+  }
+  
   trendingArticles = trendingArticles.filter((a) => a.id !== article.id).slice(0, 3);
 
   // 4. Couleur du badge

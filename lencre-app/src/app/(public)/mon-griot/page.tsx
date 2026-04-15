@@ -15,8 +15,14 @@ export const metadata = {
  */
 export default async function MonGriotPage() {
   // Récupération de tous les articles (sans filtre de catégorie)
-  const response = await getArticles();
-  const articles = response.data || [];
+  let articles: any[] = [];
+  let response: any = { last_page: 1, current_page: 1 };
+  try {
+    response = await getArticles();
+    articles = response.data || [];
+  } catch (error) {
+    console.error("Erreur lors de la récupération des articles:", error);
+  }
 
   return (
       <div className="category-page">

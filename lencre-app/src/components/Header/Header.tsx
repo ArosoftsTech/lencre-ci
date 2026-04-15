@@ -1,18 +1,16 @@
 'use client';
-
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 import SubscribeModal from '@/components/SubscribeModal/SubscribeModal';
 import './Header.css';
 const mainNav = [
-  { label: 'Politique', href: '/politique' },
-  { label: 'Économie', href: '/economie' },
-  { label: 'Culture', href: '/culture' },
-  { label: 'Etude & Emploi', href: '/etude-emploi' },
-  { label: 'Sport', href: '/sport' },
-  { label: 'Société', href: '/societe' },
-  { label: 'Vidéo & Audio', href: '/video-audio' },
+  { label: 'Le griot', href: '/mon-griot' },
+  { label: 'Eco et Politique', href: '/eco-politique' },
+  { label: 'Etude et emploi', href: '/etude-emploi' },
+  { label: 'Société et Culture', href: '/societe-culture' },
+  { label: 'Santé et Sport', href: '/sante-sport' },
+  { label: 'Video et Audio', href: '/video-audio' },
 ];
 
 
@@ -34,6 +32,27 @@ export default function Header() {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  // Verrouiller le défilement du corps quand le menu est ouvert
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
+  // Fermer le menu avec la touche Échap
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') setMobileMenuOpen(false);
+    };
+    window.addEventListener('keydown', handleEscape);
+    return () => window.removeEventListener('keydown', handleEscape);
+  }, []);
+
   return (
     <header className="header" role="banner">
       {/* Barre supérieure */}
@@ -44,26 +63,24 @@ export default function Header() {
             <Image src="/images/logo-encre.png" alt="L'Encre" width={180} height={50} className="header__logo-img" />
           </Link>
 
-          {/* Recherche */}
-          <Link href="/recherche" className="header__search" aria-label="Rechercher">
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-              <circle cx="11" cy="11" r="8" />
-              <line x1="21" y1="21" x2="16.65" y2="16.65" />
-            </svg>
-          </Link>
-
-          {/* Réseaux sociaux + Notifications */}
-          <div className="header__actions">
-            {/* Icône cloche notifications */}
-            <Link href="/notifications" className="header__notification" aria-label="Notifications">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
-                <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+          {/* Recherche & Abonnement (Centre) */}
+          <div className="header__center">
+            <Link href="/recherche" className="header__search" aria-label="Rechercher">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
-              <span className="header__notification-badge">3</span>
             </Link>
+            <button
+              className="header__subscribe-btn"
+              onClick={() => setIsSubscribeOpen(true)}
+            >
+              S'abonner
+            </button>
+          </div>
 
-            {/* Réseaux sociaux */}
+          {/* Réseaux sociaux + Burger */}
+          <div className="header__actions">
             <div className="header__socials">
               <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="header__social-link">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
@@ -107,9 +124,12 @@ export default function Header() {
         </div>
       </div>
 
+      {/* Ligne rouge de séparation */}
+      <div className="header__red-line"></div>
+
       {/* Navigation desktop */}
       <nav className="header__nav-primary" aria-label="Menu principal">
-        <div className="header__nav-inner container" style={{ position: 'relative' }}>
+        <div className="header__nav-inner container">
           <div className="header__nav-links">
             {mainNav.map((item) => (
               <Link key={item.href} href={item.href} className="header__nav-link">
@@ -117,23 +137,33 @@ export default function Header() {
               </Link>
             ))}
           </div>
-          <button
-            className="header__subscribe-btn"
-            onClick={() => setIsSubscribeOpen(true)}
-          >
-            S&apos;abonner
-          </button>
         </div>
       </nav>
 
 
 
-      {/* Navigation mobile (slide-in) */}
-      <div className={`header__mobile-menu ${mobileMenuOpen ? 'header__mobile-menu--open' : ''}`}>
+      {/* Navigation mobile (Drawer) */}
+      <div 
+        className={`header__mobile-menu ${mobileMenuOpen ? 'header__mobile-menu--open' : ''}`}
+        aria-hidden={!mobileMenuOpen}
+      >
         <div className="header__mobile-menu-overlay" onClick={toggleMobileMenu}></div>
-        <nav className="header__mobile-menu-panel" aria-label="Menu mobile">
+        <nav 
+          className="header__mobile-menu-panel" 
+          aria-label="Menu de navigation mobile"
+          tabIndex={mobileMenuOpen ? 0 : -1}
+        >
+          <div className="header__mobile-header">
+            <h3 className="header__mobile-title">Menu</h3>
+            <button 
+              className="header__mobile-close" 
+              onClick={toggleMobileMenu}
+              aria-label="Fermer le menu"
+            >
+              ✕
+            </button>
+          </div>
           <div className="header__mobile-section">
-            <h3 className="header__mobile-section-title">Menu Principal</h3>
             {mainNav.map((item) => (
               <Link
                 key={item.href}
@@ -141,20 +171,24 @@ export default function Header() {
                 className="header__mobile-link"
                 onClick={toggleMobileMenu}
               >
-                {item.label}
+                <span className="header__mobile-link-text">{item.label}</span>
+                <svg className="header__mobile-link-arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M9 18l6-6-6-6" />
+                </svg>
               </Link>
             ))}
-            <button
-              className="header__mobile-link header__mobile-link--subscribe"
-              onClick={() => {
-                toggleMobileMenu();
-                setIsSubscribeOpen(true);
-              }}
-            >
-              S&apos;abonner
-            </button>
+            <div className="header__mobile-footer">
+              <button
+                className="header__mobile-subscribe"
+                onClick={() => {
+                  toggleMobileMenu();
+                  setIsSubscribeOpen(true);
+                }}
+              >
+                S&apos;abonner à L&apos;Encre
+              </button>
+            </div>
           </div>
-
         </nav>
       </div>
       {/* Modal d'abonnement */}

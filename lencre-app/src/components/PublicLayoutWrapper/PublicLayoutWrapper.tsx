@@ -1,6 +1,5 @@
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
-import BreakingNewsTicker from "@/components/BreakingNewsTicker/BreakingNewsTicker";
 
 /**
  * PublicLayoutWrapper — L'Encre
@@ -17,7 +16,6 @@ export default function PublicLayoutWrapper({
       <Header />
       <main id="main-content">{children}</main>
       <Footer />
-      <BreakingNewsTicker />
     </>
   );
 }

@@ -12,9 +12,16 @@ export default async function CategoryPage({ params }: { params: { category: str
   const { category: categorySlug } = params;
   
   // Récupération des articles de la catégorie
-  const response = await getArticles({ category: categorySlug });
-  const articles = response.data;
-  const categoryName = articles.length > 0 ? articles[0].category.name : categorySlug.toUpperCase();
+  let articles: any[] = [];
+  try {
+    const response = await getArticles({ category: categorySlug });
+    articles = response.data || [];
+  } catch (error) {
+    console.error("Erreur lors de la récupération des articles:", error);
+    // On continue avec un tableau vide, la page affichera "Aucun article trouvé"
+  }
+  
+  const categoryName = articles.length > 0 ? articles[0].category.name : categorySlug.replace(/-/g, ' ').toUpperCase();
 
   return (
       <div className="category-page">
