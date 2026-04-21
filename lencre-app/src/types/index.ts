@@ -29,6 +29,26 @@ export interface Article {
   shares_count: number;
 }
 
+export interface Multimedia {
+  id: number;
+  title: string;
+  slug: string;
+  description: string | null;
+  type: 'video' | 'podcast';
+  external_url: string;
+  embed_url: string | null;
+  thumbnail: string | null;
+  duration: string | null;
+  is_featured: boolean;
+  status: string;
+  views_count: number;
+  author_id: number;
+  author?: Author;
+  published_at: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface PaginatedResponse<T> {
   data: T[];
   current_page: number;

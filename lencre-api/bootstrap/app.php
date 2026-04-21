@@ -15,6 +15,9 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'panel' => \App\Http\Middleware\CheckPanel::class,
         ]);
+
+        // CORS — Allow cross-origin requests from the frontend
+        $middleware->append(\App\Http\Middleware\CorsMiddleware::class);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //

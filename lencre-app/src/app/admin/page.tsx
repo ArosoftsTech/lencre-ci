@@ -11,6 +11,8 @@ interface DashboardStats {
   job_offers_count: number;
   active_job_offers_count: number;
   companies_count: number;
+  multimedia_count: number;
+  published_multimedia_count: number;
   recent_articles: Array<{
     id: number;
     title: string;
@@ -70,6 +72,11 @@ export default function AdminDashboard() {
           <div className="cms-stat-card__icon">🏢</div>
           <div className="cms-stat-card__value">{stats.companies_count || 0}</div>
           <div className="cms-stat-card__label">Entreprises</div>
+        </div>
+        <div className="cms-stat-card">
+          <div className="cms-stat-card__icon">🎬</div>
+          <div className="cms-stat-card__value">{stats.multimedia_count || 0}</div>
+          <div className="cms-stat-card__label">Multimédia</div>
         </div>
       </div>
 

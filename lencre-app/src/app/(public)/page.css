@@ -208,6 +208,103 @@
   opacity: 1;
 }
 
+.home__video-card-link {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+}
+
+.home__video-card-duration {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.3px;
+}
+
+.home__video-card-type {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: var(--rouge-profond, #C1121F);
+  color: #fff;
+  font-size: 0.65rem;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.5px;
+}
+
+/* Multimedia cards — Page /video-audio */
+.multimedia-card {
+  display: block;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-radius: 12px;
+}
+.multimedia-card:hover {
+  transform: translateY(-4px);
+}
+.multimedia-card__thumb {
+  position: relative;
+  aspect-ratio: 16/9;
+  border-radius: 12px;
+  overflow: hidden;
+  margin-bottom: 12px;
+}
+.multimedia-card__overlay {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.3);
+  opacity: 0;
+  transition: opacity 0.3s;
+  border-radius: 12px;
+}
+.multimedia-card:hover .multimedia-card__overlay {
+  opacity: 1;
+}
+.multimedia-card__play {
+  font-size: 3rem;
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.3));
+}
+.multimedia-card__duration {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  background: rgba(0,0,0,0.85);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: 4px;
+}
+.multimedia-card__title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--bleu-nuit, #0D1B2A);
+  line-height: 1.4;
+  margin-bottom: 6px;
+}
+.multimedia-card__desc {
+  font-size: 0.85rem;
+  color: #666;
+  line-height: 1.5;
+  margin-bottom: 8px;
+}
+.multimedia-card__meta {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: #999;
+}
+
 @media (max-width: 1024px) {
   .home__urgent-grid, .home__main-grid {
     grid-template-columns: 1fr;

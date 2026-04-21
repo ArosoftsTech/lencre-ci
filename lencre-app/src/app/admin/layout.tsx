@@ -48,6 +48,7 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
     { label: 'Dashboard', href: '/admin', icon: '📊' },
     { label: 'Articles', href: '/admin/articles', icon: '📝' },
     { label: 'Validation', href: '/admin/validation', icon: '⚖️' },
+    { label: 'Multimédia', href: '/admin/multimedia', icon: '🎬' },
     { label: 'Offres d\'emploi', href: '/admin/job-offers', icon: '💼' },
     { label: 'Entreprises', href: '/admin/companies', icon: '🏢' },
     { label: 'Rédacteurs', href: '/admin/users', icon: '👥' },

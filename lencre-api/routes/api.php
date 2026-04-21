@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\MediaController;
+use App\Http\Controllers\Api\V1\MultimediaController;
 use App\Http\Controllers\Api\V1\UserController;
 use App\Http\Controllers\Api\V1\JobOfferController;
 use App\Http\Controllers\Api\V1\CompanyProfileController;
@@ -35,6 +36,18 @@ Route::prefix('v1')->group(function () {
     Route::get('job-offers/stats', [JobOfferController::class, 'stats']);
     Route::get('job-offers', [JobOfferController::class, 'index']);
     Route::get('job-offers/{slug}', [JobOfferController::class, 'show']);
+
+    // Multimedia (public - liste)
+    Route::get('multimedia', [MultimediaController::class, 'index']);
+
+    // Multimedia admin GET routes (MUST be before {slug} to avoid route conflict)
+    Route::middleware(['auth:api', 'panel:admin'])->group(function () {
+        Route::get('multimedia/admin', [MultimediaController::class, 'adminIndex']);
+        Route::get('multimedia/admin/{id}', [MultimediaController::class, 'adminShow']);
+    });
+
+    // Multimedia (public - détail par slug, après les routes admin)
+    Route::get('multimedia/{slug}', [MultimediaController::class, 'show']);
 
     // Company Profiles (public)
     Route::get('company-profiles', [CompanyProfileController::class, 'index']);
@@ -79,6 +92,13 @@ Route::prefix('v1')->group(function () {
         Route::put('company-profiles/{id}', [CompanyProfileController::class, 'update']);
         Route::delete('company-profiles/{id}', [CompanyProfileController::class, 'destroy']);
 
+        // Multimedia CRUD (admin - POST/PUT/DELETE)
+        Route::post('multimedia', [MultimediaController::class, 'store']);
+        Route::put('multimedia/{id}', [MultimediaController::class, 'update']);
+        Route::delete('multimedia/{id}', [MultimediaController::class, 'destroy']);
+        Route::post('multimedia/{id}/validate', [MultimediaController::class, 'validate_media']);
+        Route::post('multimedia/{id}/reject', [MultimediaController::class, 'reject']);
+
         // Dashboard stats
         Route::get('dashboard/stats', function () {
             return response()->json([
@@ -88,6 +108,8 @@ Route::prefix('v1')->group(function () {
                 'job_offers_count' => \App\Models\JobOffer::count(),
                 'active_job_offers_count' => \App\Models\JobOffer::active()->count(),
                 'companies_count' => \App\Models\CompanyProfile::count(),
+                'multimedia_count' => \App\Models\Multimedia::count(),
+                'published_multimedia_count' => \App\Models\Multimedia::published()->count(),
                 'recent_articles' => \App\Models\Article::with(['category', 'author'])
                     ->orderBy('created_at', 'desc')
                     ->take(5)
@@ -124,6 +146,14 @@ Route::prefix('v1/redaction')->group(function () {
         // Media journalist workspace
         Route::get('media', [\App\Http\Controllers\Api\Redaction\MediaController::class, 'index']);
         Route::post('media/upload', [\App\Http\Controllers\Api\Redaction\MediaController::class, 'upload']);
+
+        // Multimedia journalist CRUD
+        Route::get('multimedia', [\App\Http\Controllers\Api\Redaction\MultimediaController::class, 'index']);
+        Route::get('multimedia/{id}', [\App\Http\Controllers\Api\Redaction\MultimediaController::class, 'show']);
+        Route::post('multimedia', [\App\Http\Controllers\Api\Redaction\MultimediaController::class, 'store']);
+        Route::put('multimedia/{id}', [\App\Http\Controllers\Api\Redaction\MultimediaController::class, 'update']);
+        Route::delete('multimedia/{id}', [\App\Http\Controllers\Api\Redaction\MultimediaController::class, 'destroy']);
+        Route::post('multimedia/{id}/submit', [\App\Http\Controllers\Api\Redaction\MultimediaController::class, 'submit']);
         Route::delete('media/{filename}', [\App\Http\Controllers\Api\Redaction\MediaController::class, 'destroy']);
 
         // Dashboard stats pour le journaliste connecté

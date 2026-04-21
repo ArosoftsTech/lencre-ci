@@ -35,6 +35,14 @@ const nextConfig = {
         protocol: 'http',
         hostname: 'localhost',
       },
+      {
+        protocol: 'https',
+        hostname: 'img.youtube.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'i.ytimg.com',
+      },
       /* 
        * AJOUTER ICI VOTRE DOMAINE DE PRODUCTION POUR LES IMAGES 
        * Exemple: { protocol: 'https', hostname: 'api.lencre.ci' }

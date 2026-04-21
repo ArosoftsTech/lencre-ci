@@ -1,4 +1,4 @@
-import { Article, Category, PaginatedResponse } from '@/types';
+import { Article, Category, Multimedia, PaginatedResponse } from '@/types';
 
 export interface JobOffer {
   id: number;
@@ -179,3 +179,41 @@ export async function getJobOfferBySlug(slug: string): Promise<JobOffer | null> 
   }
 }
 
+/** Multimedia APIs */
+export async function getMultimedia(params?: {
+  type?: 'video' | 'podcast';
+  featured_only?: boolean;
+  search?: string;
+  per_page?: number;
+}): Promise<PaginatedResponse<Multimedia>> {
+  try {
+    const urlParams = new URLSearchParams();
+    if (params?.type) urlParams.append('type', params.type);
+    if (params?.featured_only) urlParams.append('featured_only', '1');
+    if (params?.search) urlParams.append('search', params.search);
+    if (params?.per_page) urlParams.append('per_page', params.per_page.toString());
+
+    const response = await fetch(`${API_URL}/multimedia?${urlParams.toString()}`, {
+      next: { revalidate: 60 },
+    });
+
+    if (!response.ok) return { data: [], current_page: 1, last_page: 1, per_page: 15, total: 0 };
+    return response.json();
+  } catch (error) {
+    console.error('getMultimedia error:', error);
+    return { data: [], current_page: 1, last_page: 1, per_page: 15, total: 0 };
+  }
+}
+
+export async function getMultimediaBySlug(slug: string): Promise<Multimedia | null> {
+  try {
+    const response = await fetch(`${API_URL}/multimedia/${slug}`, {
+      next: { revalidate: 60 },
+    });
+    if (!response.ok) return null;
+    return response.json();
+  } catch (error) {
+    console.error('getMultimediaBySlug error:', error);
+    return null;
+  }
+}

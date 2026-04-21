@@ -2,35 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 import ArticleCard from '@/components/ArticleCard/ArticleCard';
 import HeroCarousel from '@/components/HeroCarousel/HeroCarousel';
-import { getTrendingArticles, getArticles } from '@/lib/api';
+import { getTrendingArticles, getArticles, getMultimedia } from '@/lib/api';
 import './page.css';
-
-const videoItems = [
-  {
-    id: 'v1',
-    title: 'Débat Hebdo : Quel avenir pour la tech africaine ?',
-    duration: '45:20',
-    thumbnailUrl: 'https://picsum.photos/seed/video1/800/450',
-    views: '12.5k',
-    type: 'Débat'
-  },
-  {
-    id: 'v2',
-    title: 'Immersion : Au cœur des marchés d\'Abidjan',
-    duration: '12:05',
-    thumbnailUrl: 'https://picsum.photos/seed/video2/800/450',
-    views: '8.2k',
-    type: 'Reportage'
-  },
-  {
-    id: 'v3',
-    title: 'Interview : Le Ministre de l\'Économie répond',
-    duration: '28:10',
-    thumbnailUrl: 'https://picsum.photos/seed/video3/800/450',
-    views: '45k',
-    type: 'Interview'
-  }
-];
 
 /**
  * Page d'Accueil — L'Encre
@@ -39,11 +12,13 @@ const videoItems = [
  * Enveloppée dans PublicLayoutWrapper pour inclure Header/Footer.
  */
 export default async function HomePage() {
-  const [monGriotArticles, mainArticlesResponse] = await Promise.all([
+  const [monGriotArticles, mainArticlesResponse, multimediaResponse] = await Promise.all([
     getTrendingArticles(),
     getArticles(),
+    getMultimedia({ per_page: 6 }),
   ]);
   const mainArticles = mainArticlesResponse.data;
+  const multimediaItems = multimediaResponse.data;
 
   // Préparer les slides pour le carousel (les 5 premiers articles)
   const heroSlides = mainArticles.slice(0, 5);
@@ -121,7 +96,7 @@ export default async function HomePage() {
           </div>
         </section>
 
-        {/* Section 3 — Vidéo & Audio */}
+        {/* Section 3 — Vidéo & Audio (Dynamique) */}
         <section className="home__video" aria-label="Vidéo et Audio">
            <div className="container">
              <div className="home__video-header">
@@ -129,22 +104,38 @@ export default async function HomePage() {
                <Link href="/video-audio" className="home__video-more">Tout voir</Link>
              </div>
              <div className="home__video-grid">
-               {videoItems.map((item) => (
-                 <article key={item.id} className="home__video-card">
-                   <div className="home__video-card-thumb">
-                     <Image
-                       src={item.thumbnailUrl}
-                       alt={item.title}
-                       width={420}
-                       height={236}
-                       className="home__video-card-img"
-                       sizes="(max-width: 768px) 100vw, 33vw"
-                     />
-                     <div className="home__video-card-play">▶</div>
-                   </div>
-                   <h3 className="home__video-card-title">{item.title}</h3>
-                 </article>
-               ))}
+               {multimediaItems.length > 0 ? (
+                 multimediaItems.slice(0, 3).map((item) => (
+                   <article key={item.id} className="home__video-card">
+                     <a href={item.external_url} target="_blank" rel="noopener noreferrer" className="home__video-card-link">
+                       <div className="home__video-card-thumb">
+                         <Image
+                           src={item.thumbnail || `https://picsum.photos/seed/media${item.id}/800/450`}
+                           alt={item.title}
+                           width={420}
+                           height={236}
+                           className="home__video-card-img"
+                           sizes="(max-width: 768px) 100vw, 33vw"
+                         />
+                         <div className="home__video-card-play">
+                           {item.type === 'video' ? '▶' : '🎧'}
+                         </div>
+                         {item.duration && (
+                           <span className="home__video-card-duration">{item.duration}</span>
+                         )}
+                         <span className="home__video-card-type">
+                           {item.type === 'video' ? 'VIDÉO' : 'PODCAST'}
+                         </span>
+                       </div>
+                       <h3 className="home__video-card-title">{item.title}</h3>
+                     </a>
+                   </article>
+                 ))
+               ) : (
+                 <p style={{ color: 'rgba(255,255,255,0.5)', gridColumn: '1 / -1', textAlign: 'center', padding: '2rem' }}>
+                   Aucun média disponible pour le moment.
+                 </p>
+               )}
              </div>
            </div>
         </section>

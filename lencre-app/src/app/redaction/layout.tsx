@@ -47,6 +47,7 @@ export default function RedactionLayout({ children }: { children: React.ReactNod
   const navItems = [
     { label: 'Dashboard', href: '/redaction', icon: '📊' },
     { label: 'Mes Articles', href: '/redaction/articles', icon: '📝' },
+    { label: 'Mes Médias', href: '/redaction/multimedia', icon: '🎬' },
     { label: 'Ma Médiathèque', href: '/redaction/media', icon: '🖼️' },
     { label: 'Mon Profil', href: '/redaction/profile', icon: '👤' },
   ];
