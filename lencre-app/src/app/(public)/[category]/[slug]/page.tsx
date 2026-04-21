@@ -120,9 +120,10 @@ export default async function ArticlePage({ params }: Props) {
 
           {/* Boutons de partage */}
           <ShareButtons 
-            articleId={article.id} 
+            contentId={article.id} 
             title={article.title} 
             initialShareCount={article.shares_count} 
+            contentType="article"
           />
 
         </article>

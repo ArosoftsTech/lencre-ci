@@ -27,8 +27,6 @@ class ArticleController extends Controller
         $user = $request->user();
         $article = Article::with(['category', 'reviews', 'versions' => function($q) {
             $q->orderBy('created_at', 'desc')->take(5);
-        }, 'aiAnalysisReports' => function($q) {
-            $q->with('flags')->orderBy('created_at', 'desc')->take(1);
         }])->where('author_id', $user->id)->findOrFail($id);
         
         return response()->json($article);
@@ -78,7 +76,7 @@ class ArticleController extends Controller
         $user = $request->user();
         $article = Article::where('author_id', $user->id)->findOrFail($id);
 
-        if (!in_array($article->status, ['draft', 'edit_requested', 'rejected', 'ai_corrections_required'])) {
+        if (!in_array($article->status, ['draft', 'edit_requested', 'rejected'])) {
             return response()->json(['error' => 'Cet article ne peut plus être modifié (statut en cours: ' . $article->status . ')'], 403);
         }
 
@@ -122,14 +120,11 @@ class ArticleController extends Controller
         $user = $request->user();
         $article = Article::where('author_id', $user->id)->findOrFail($id);
 
-        if (!in_array($article->status, ['draft', 'edit_requested', 'ai_corrections_required'])) {
+        if (!in_array($article->status, ['draft', 'edit_requested'])) {
             return response()->json(['error' => 'Action impossible, article déjà soumis ou en mauvaise posture.'], 403);
         }
 
-        $article->update(['status' => 'ai_review_pending']);
-
-        // Déclencher l'appel vers le microservice IA
-        \App\Jobs\ProcessAiAnalysis::dispatch($article);
+        $article->update(['status' => 'pending_review']);
 
         ActivityLog::create([
             'user_id' => $user->id,
@@ -138,6 +133,6 @@ class ArticleController extends Controller
             'subject_id' => $article->id,
         ]);
 
-        return response()->json(['message' => 'Article soumis pour analyse IA', 'article' => $article]);
+        return response()->json(['message' => 'Article soumis avec succès pour revue.', 'article' => $article]);
     }
 }

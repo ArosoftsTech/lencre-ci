@@ -31,11 +31,11 @@ export default function Footer() {
           <div className="footer__col">
             <h3 className="footer__col-title">Rubriques</h3>
             <ul className="footer__menu">
-              <li><Link href="/cote-divoire" className="footer__link">Côte d'Ivoire</Link></li>
-              <li><Link href="/afrique" className="footer__link">Afrique</Link></li>
-              <li><Link href="/politique" className="footer__link">Politique</Link></li>
-              <li><Link href="/economie" className="footer__link">Économie</Link></li>
-              <li><Link href="/culture" className="footer__link">Culture</Link></li>
+              <li><Link href="/mon-griot" className="footer__link">Le griot</Link></li>
+              <li><Link href="/eco-politique" className="footer__link">Eco et Politique</Link></li>
+              <li><Link href="/societe-culture" className="footer__link">Société et Culture</Link></li>
+              <li><Link href="/sante-sport" className="footer__link">Santé et Sport</Link></li>
+              <li><Link href="/video-audio" className="footer__link">Video et Audio</Link></li>
             </ul>
           </div>
 

@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Article extends Model
 {
-    protected $fillable = ['title', 'slug', 'excerpt', 'content', 'featured_image', 'is_trending', 'is_urgent', 'published_at', 'category_id', 'author_id', 'status', 'meta_title', 'meta_description', 'meta_keywords', 'audio_url', 'credit_photo', 'ai_score', 'ai_level', 'ai_reviewed_at', 'ai_override', 'ai_override_by', 'ai_override_reason', 'shares_count'];
+    protected $fillable = ['title', 'slug', 'excerpt', 'content', 'featured_image', 'is_trending', 'is_urgent', 'published_at', 'category_id', 'author_id', 'status', 'meta_title', 'meta_description', 'meta_keywords', 'audio_url', 'credit_photo', 'shares_count'];
 
     protected function casts(): array
     {
@@ -17,8 +17,6 @@ class Article extends Model
             'is_urgent' => 'boolean',
             'published_at' => 'datetime',
             'meta_keywords' => 'array',
-            'ai_reviewed_at' => 'datetime',
-            'ai_override' => 'boolean',
             'shares_count' => 'integer',
         ];
     }
@@ -41,10 +39,5 @@ class Article extends Model
     public function reviews(): HasMany
     {
         return $this->hasMany(ArticleReview::class);
-    }
-
-    public function aiAnalysisReports(): HasMany
-    {
-        return $this->hasMany(AiAnalysisReport::class);
     }
 }

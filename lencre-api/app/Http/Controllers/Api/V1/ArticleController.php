@@ -10,7 +10,7 @@ class ArticleController extends Controller
 {
     public function index(Request $request)
     {
-        $query = Article::with(['category', 'author', 'aiAnalysisReports.flags'])->orderBy('created_at', 'desc');
+        $query = Article::with(['category', 'author'])->orderBy('created_at', 'desc');
 
         if ($request->has('category')) {
             $query->whereHas('category', function($q) use ($request) {
@@ -40,7 +40,7 @@ class ArticleController extends Controller
 
     public function show($slug)
     {
-        $article = Article::with(['category', 'author', 'aiAnalysisReports.flags'])->where('slug', $slug)->firstOrFail();
+        $article = Article::with(['category', 'author'])->where('slug', $slug)->firstOrFail();
         return response()->json($article);
     }
 
@@ -117,12 +117,6 @@ class ArticleController extends Controller
             'status' => 'published',
             'published_at' => now(),
         ];
-
-        if ($request->has('ai_override_reason')) {
-            $updateData['ai_override'] = true;
-            $updateData['ai_override_by'] = auth('api')->id();
-            $updateData['ai_override_reason'] = $request->ai_override_reason;
-        }
 
         $article->update($updateData);
         

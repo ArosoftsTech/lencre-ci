@@ -128,7 +128,7 @@ export default function HeroCarousel({ slides, trends }: HeroCarouselProps) {
                 <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
                 <polyline points="17 6 23 6 23 12" />
               </svg>
-              <h3>Tendances</h3>
+              <h3>Actualités</h3>
             </div>
             <ul className="hero-carousel__trend-list">
               {trends.slice(0, 4).map((trend) => (

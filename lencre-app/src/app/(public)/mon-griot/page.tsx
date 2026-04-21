@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import ArticleCard from '@/components/ArticleCard/ArticleCard';
 import { getArticles } from '@/lib/api';
+import '../../[category]/page.css';
 
 export const metadata = {
   title: 'Mon Griot - Toute l\'actualité | L\'Encre',
@@ -25,49 +26,35 @@ export default async function MonGriotPage() {
   }
 
   return (
-      <div className="category-page">
-        <header className="category-page__header" style={{ padding: '60px 0', backgroundColor: '#f9f9f9', borderBottom: '1px solid #eee' }}>
-          <div className="container">
-            <nav className="category-page__breadcrumb" style={{ marginBottom: '20px', fontSize: '0.9rem', color: '#666' }}>
-              <Link href="/">Accueil</Link> / <span>Mon Griot</span>
-            </nav>
-            <h1 className="category-page__title" style={{ fontSize: '3rem', fontWeight: 900, textTransform: 'uppercase' }}>
-              MON GRIOT
-            </h1>
-            <p style={{ marginTop: '10px', fontSize: '1.2rem', color: '#555' }}>
+      <div className="category-page container">
+        <header className="category-page__header">
+            <h1 className="section-title">Mon Griot</h1>
+            <p className="category-page__description">
               Toute l'actualité en temps réel
             </p>
-          </div>
         </header>
 
-        <section className="category-page__content" style={{ padding: '60px 0' }}>
-          <div className="container">
-            {articles.length > 0 ? (
-              <div className="category-page__grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: '30px' }}>
-                {articles.map((article: any) => (
-                  <ArticleCard key={article.id} article={article} variant="default" />
-                ))}
-              </div>
-            ) : (
-              <div className="category-page__empty" style={{ textAlign: 'center', padding: '100px 0' }}>
-                <p style={{ fontSize: '1.2rem', color: '#666' }}>Aucun article publié pour le moment.</p>
-                <Link href="/" className="btn btn--primary" style={{ marginTop: '20px', display: 'inline-block' }}>
-                  Retour à l'accueil
-                </Link>
-              </div>
-            )}
-            
-            {/* Pagination UI - À implémenter plus tard si nécessaire */}
-            {response.last_page > 1 && (
-               <div style={{ marginTop: '40px', textAlign: 'center' }}>
-                 <p style={{ color: '#666' }}>Page {response.current_page} sur {response.last_page}</p>
-                 <div style={{ display: 'flex', justifyContent: 'center', gap: '10px', marginTop: '15px' }}>
-                    {/* Les boutons de pagination seront ajoutés ici */}
-                 </div>
-               </div>
-            )}
+        {articles.length > 0 ? (
+          <div className="category-page__grid">
+            {articles.map((article: any) => (
+              <ArticleCard key={article.id} article={article} variant="default" />
+            ))}
           </div>
-        </section>
+        ) : (
+          <div className="category-page__empty">
+            <p>Aucun article publié pour le moment.</p>
+            <Link href="/" className="btn btn--primary" style={{ marginTop: '20px', display: 'inline-block' }}>
+              Retour à l'accueil
+            </Link>
+          </div>
+        )}
+
+        {/* Pagination UI - À implémenter plus tard si nécessaire */}
+        {response.last_page > 1 && (
+          <div className="category-page__pagination">
+            <p className="category-page__page-info">Page {response.current_page} sur {response.last_page}</p>
+          </div>
+        )}
       </div>
   );
 }

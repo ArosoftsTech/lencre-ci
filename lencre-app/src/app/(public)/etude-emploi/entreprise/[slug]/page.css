@@ -1,0 +1,143 @@
+.company-profile-page {
+  background-color: #fafafa;
+  min-height: calc(100vh - 80px);
+}
+
+.company-header {
+  margin-bottom: 3rem;
+}
+
+.company-header__back {
+  display: inline-block;
+  color: #64748b;
+  text-decoration: none;
+  font-size: 0.95rem;
+  font-weight: 500;
+  margin-bottom: 1.5rem;
+  transition: color 0.2s;
+}
+
+.company-header__back:hover {
+  color: #C1121F;
+}
+
+.company-header__card {
+  background-color: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  padding: 2.5rem;
+  display: flex;
+  gap: 2.5rem;
+  align-items: flex-start;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+
+.company-header__logo-wrapper {
+  flex-shrink: 0;
+  width: 140px;
+  height: 140px;
+  background-color: #f1f5f9;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.company-header__logo {
+  object-fit: contain;
+  width: 100%;
+  height: 100%;
+}
+
+.company-header__logo-placeholder {
+  color: #94a3b8;
+  font-weight: 600;
+  font-size: 1.2rem;
+}
+
+.company-header__info {
+  flex: 1;
+}
+
+.company-header__name {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin-bottom: 0.5rem;
+  line-height: 1.2;
+}
+
+.company-header__meta {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.company-header__sector {
+  background-color: #f1f5f9;
+  color: #475569;
+  padding: 0.4rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.company-header__website {
+  color: #C1121F;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+}
+
+.company-header__website:hover {
+  text-decoration: underline;
+}
+
+.company-header__description {
+  font-size: 1.05rem;
+  line-height: 1.7;
+  color: #475569;
+  margin: 0;
+  max-width: 800px;
+}
+
+/* Offers Section */
+.company-offers__header {
+  border-bottom: 2px solid #e2e8f0;
+  padding-bottom: 1rem;
+  margin-bottom: 2rem;
+}
+
+.company-offers__title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0;
+}
+
+.company-offers__empty {
+  background-color: #f8fafc;
+  border: 1px dashed #cbd5e1;
+  border-radius: 12px;
+  padding: 4rem;
+  text-align: center;
+  color: #64748b;
+  font-size: 1.1rem;
+}
+
+@media (max-width: 768px) {
+  .company-header__card {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 1.5rem;
+  }
+  .company-header__meta {
+    justify-content: center;
+    flex-direction: column;
+    gap: 0.8rem;
+  }
+}

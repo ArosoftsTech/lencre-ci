@@ -7,6 +7,8 @@ use App\Http\Controllers\Api\V1\CategoryController;
 use App\Http\Controllers\Api\V1\ArticleController;
 use App\Http\Controllers\Api\V1\MediaController;
 use App\Http\Controllers\Api\V1\UserController;
+use App\Http\Controllers\Api\V1\JobOfferController;
+use App\Http\Controllers\Api\V1\CompanyProfileController;
 use App\Http\Controllers\Api\Redaction\AuthController as RedactionAuthController;
 use App\Http\Controllers\Api\Redaction\ProfileController as RedactionProfileController;
 
@@ -28,6 +30,15 @@ Route::prefix('v1')->group(function () {
     Route::get('articles', [ArticleController::class, 'index']);
     Route::get('articles/{slug}', [ArticleController::class, 'show']);
     Route::post('articles/{id}/share', [ArticleController::class, 'incrementShare']);
+
+    // Job Offers (public)
+    Route::get('job-offers/stats', [JobOfferController::class, 'stats']);
+    Route::get('job-offers', [JobOfferController::class, 'index']);
+    Route::get('job-offers/{slug}', [JobOfferController::class, 'show']);
+
+    // Company Profiles (public)
+    Route::get('company-profiles', [CompanyProfileController::class, 'index']);
+    Route::get('company-profiles/{slug}', [CompanyProfileController::class, 'show']);
 
     // --- Protected routes (CMS) ---
     Route::middleware(['auth:api', 'panel:admin'])->group(function () {
@@ -57,13 +68,31 @@ Route::prefix('v1')->group(function () {
         Route::put('users/{id}', [UserController::class, 'update']);
         Route::delete('users/{id}', [UserController::class, 'destroy']);
 
+        // Job Offers CRUD
+        Route::post('job-offers', [JobOfferController::class, 'store']);
+        Route::put('job-offers/{id}', [JobOfferController::class, 'update']);
+        Route::delete('job-offers/{id}', [JobOfferController::class, 'destroy']);
+        Route::post('job-offers/{id}/toggle-status', [JobOfferController::class, 'toggleStatus']);
+
+        // Company Profiles CRUD
+        Route::post('company-profiles', [CompanyProfileController::class, 'store']);
+        Route::put('company-profiles/{id}', [CompanyProfileController::class, 'update']);
+        Route::delete('company-profiles/{id}', [CompanyProfileController::class, 'destroy']);
+
         // Dashboard stats
         Route::get('dashboard/stats', function () {
             return response()->json([
                 'articles_count' => \App\Models\Article::count(),
                 'categories_count' => \App\Models\Category::count(),
                 'users_count' => \App\Models\User::count(),
+                'job_offers_count' => \App\Models\JobOffer::count(),
+                'active_job_offers_count' => \App\Models\JobOffer::active()->count(),
+                'companies_count' => \App\Models\CompanyProfile::count(),
                 'recent_articles' => \App\Models\Article::with(['category', 'author'])
+                    ->orderBy('created_at', 'desc')
+                    ->take(5)
+                    ->get(),
+                'recent_job_offers' => \App\Models\JobOffer::with('author')
                     ->orderBy('created_at', 'desc')
                     ->take(5)
                     ->get(),
@@ -72,9 +101,6 @@ Route::prefix('v1')->group(function () {
     });
 });
 
-Route::prefix('v1/internal')->group(function () {
-    Route::post('ai-report', [\App\Http\Controllers\Api\Internal\AiCallbackController::class, 'store']);
-});
 
 Route::prefix('v1/redaction')->group(function () {
     Route::group(['prefix' => 'auth'], function () {

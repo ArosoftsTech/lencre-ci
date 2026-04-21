@@ -4,14 +4,22 @@ import { useState } from 'react';
 import './ShareButtons.css';
 
 interface ShareButtonsProps {
-  articleId: number;
+  contentId: number;
   title: string;
   initialShareCount?: number;
+  contentType?: 'article' | 'job';
+  showCount?: boolean;
 }
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://127.0.0.1:8000/api/v1';
 
-export default function ShareButtons({ articleId, title, initialShareCount = 0 }: ShareButtonsProps) {
+export default function ShareButtons({ 
+  contentId, 
+  title, 
+  initialShareCount = 0,
+  contentType = 'article',
+  showCount = true
+}: ShareButtonsProps) {
   const [count, setCount] = useState(initialShareCount);
 
   // On construit l'URL côté client uniquement
@@ -19,10 +27,13 @@ export default function ShareButtons({ articleId, title, initialShareCount = 0 }
 
   const incrementShare = async () => {
     try {
+      // Pour l'instant on n'incrémente que si c'est un article ou si l'API gère les jobs
+      if (contentType !== 'article') return;
+
       // Mise à jour optimiste
       setCount(prev => prev + 1);
 
-      const res = await fetch(`${API_URL}/articles/${articleId}/share`, {
+      const res = await fetch(`${API_URL}/articles/${contentId}/share`, {
         method: 'POST',
       });
       
@@ -105,10 +116,12 @@ export default function ShareButtons({ articleId, title, initialShareCount = 0 }
 
   return (
     <div className="share-bar">
-      <div className="share-bar__count">
-        <span className="share-bar__count-number">{count}</span>
-        <span className="share-bar__count-label">Partages</span>
-      </div>
+      {showCount && (
+        <div className="share-bar__count">
+          <span className="share-bar__count-number">{count}</span>
+          <span className="share-bar__count-label">Partages</span>
+        </div>
+      )}
 
       <div className="share-bar__buttons">
         <button onClick={shareOnWhatsApp} className="share-btn share-btn--whatsapp" aria-label="Partager sur WhatsApp">

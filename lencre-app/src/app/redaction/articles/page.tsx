@@ -49,9 +49,6 @@ export default function RedactionArticlesPage() {
       case 'pending_review': return <span className="cms-badge" style={{background:'#eef2ff', color:'#4f46e5'}}>En relecture Editoriale</span>;
       case 'rejected': return <span className="cms-badge" style={{background:'#fef2f2', color:'#ef4444'}}>Refusé éditeur</span>;
       case 'edit_requested': return <span className="cms-badge" style={{background:'#fffbeb', color:'#d97706'}}>Révision requise</span>;
-      case 'ai_review_pending': return <span className="cms-badge" style={{background:'#f3e8ff', color:'#9333ea'}}>Analyse IA en cours...</span>;
-      case 'ai_corrections_required': return <span className="cms-badge" style={{background:'#fff1f2', color:'#be123c'}}>Corrections IA exigées</span>;
-      case 'ai_blocked': return <span className="cms-badge" style={{background:'#991b1b', color:'#fecaca'}}>Bloqué par l'IA</span>;
       default: return <span className="cms-badge cms-badge--draft">Brouillon</span>;
     }
   };
@@ -92,9 +89,9 @@ export default function RedactionArticlesPage() {
                 <td>
                   <div className="cms-table__actions">
                     <Link href={`/redaction/articles/${article.id}/edit`} className="cms-btn cms-btn--secondary cms-btn--sm">
-                      ✏️ {['published', 'pending_review', 'ai_review_pending'].includes(article.status) ? 'Voir' : 'Modifier'}
+                      ✏️ {['published', 'pending_review'].includes(article.status) ? 'Voir' : 'Modifier'}
                     </Link>
-                    {!['published', 'pending_review', 'ai_review_pending'].includes(article.status) && (
+                    {!['published', 'pending_review'].includes(article.status) && (
                       <button onClick={() => handleDelete(article.id, article.title)} className="cms-btn cms-btn--danger cms-btn--sm">
                         🗑️
                       </button>
