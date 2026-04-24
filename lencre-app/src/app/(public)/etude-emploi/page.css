@@ -245,6 +245,16 @@
   left: 12px;
 }
 
+.badge.badge--stage { background-color: #2A9D8F; color: #fff; }
+.badge.badge--freelance { background-color: #F59E0B; color: #fff; }
+.badge.badge--consultance { background-color: #6366F1; color: #fff; }
+.badge.badge--emploi { background-color: #C1121F; color: #fff; }
+
+.emploi-companies {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+}
+
 .emploi-card__content {
   padding: var(--space-md) var(--space-lg) var(--space-lg);
 }

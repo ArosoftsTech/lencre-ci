@@ -80,7 +80,17 @@ export default async function HomePage() {
             <div className="home__main-grid">
               <div className="home__main-hero">
                 {mainArticles.length > 0 ? (
-                  <ArticleCard article={mainArticles[0]} variant="hero" />
+                  <>
+                    <ArticleCard article={mainArticles[0]} variant="hero" />
+                    <div className="home__partner-ad">
+                      <div className="home__partner-ad-content">
+                        <span className="home__partner-ad-label">Espace Partenaire</span>
+                        <h3 className="home__partner-ad-title">Boostez votre visibilité avec L'Encre CI</h3>
+                        <p className="home__partner-ad-text">Découvrez nos offres d'espaces publicitaires et touchez une audience ciblée de professionnels.</p>
+                        <a href="#" className="home__partner-ad-button">En savoir plus</a>
+                      </div>
+                    </div>
+                  </>
                 ) : (
                   <p style={{ color: 'rgba(255,255,255,0.5)', padding: '2rem' }}>Aucun article à la une.</p>
                 )}

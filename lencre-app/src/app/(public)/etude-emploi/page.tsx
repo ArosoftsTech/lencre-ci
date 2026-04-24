@@ -108,7 +108,7 @@ export default async function EtudeEmploiPage({
                           style={{ objectFit: 'cover', width: '100%', height: '100%' }}
                         />
                         <div className="emploi-card__type-badge">
-                          <span className="badge" style={{ backgroundColor: job.type === 'stage' ? '#2A9D8F' : job.type === 'freelance' ? '#F59E0B' : job.type === 'consultance' ? '#6366F1' : '#C1121F' }}>
+                          <span className={`badge badge--${job.type}`}>
                             {job.type.toUpperCase()}
                           </span>
                         </div>
@@ -283,7 +283,7 @@ export default async function EtudeEmploiPage({
         </div>
 
         {/* ═══ ILS RECRUTENT ACTUELLEMENT ═══ */}
-        <div className="emploi-companies" style={{ marginTop: '2rem', marginBottom: '2rem' }}>
+        <div className="emploi-companies">
           <h2 className="emploi-companies__title">Ils recrutent actuellement</h2>
           <div className="emploi-companies__grid">
             {companies.map((company, i) => (

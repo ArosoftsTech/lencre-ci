@@ -113,8 +113,8 @@
   font-size: 0.88rem;
   color: var(--text-body);
   background: #fff;
-  appearance: none;
   -webkit-appearance: none;
+  appearance: none;
   cursor: pointer;
   transition: all var(--transition-fast);
   outline: none;
