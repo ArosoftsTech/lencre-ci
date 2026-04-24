@@ -143,7 +143,7 @@ export async function getCompanyProfiles(featuredOnly = false): Promise<CompanyP
     if (featuredOnly) url.searchParams.append('featured_only', '1');
 
     const response = await fetch(url.toString(), {
-      next: { revalidate: 3600 },
+      next: { revalidate: 60 },
     });
     if (!response.ok) return [];
     return response.json();

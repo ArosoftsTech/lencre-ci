@@ -79,7 +79,11 @@ export default async function HomePage() {
             <h2 className="section-title">À la Une</h2>
             <div className="home__main-grid">
               <div className="home__main-hero">
-                <ArticleCard article={mainArticles[0]} variant="hero" />
+                {mainArticles.length > 0 ? (
+                  <ArticleCard article={mainArticles[0]} variant="hero" />
+                ) : (
+                  <p style={{ color: 'rgba(255,255,255,0.5)', padding: '2rem' }}>Aucun article à la une.</p>
+                )}
               </div>
               <div className="home__main-sidebar">
                 {mainArticles.slice(1, 4).map((article: any) => (

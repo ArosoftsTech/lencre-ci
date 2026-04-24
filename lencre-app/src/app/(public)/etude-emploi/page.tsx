@@ -32,7 +32,7 @@ export default async function EtudeEmploiPage({
       date_range,
       page: page ? parseInt(page) : 1
     }),
-    getCompanyProfiles(true) // featured only
+    getCompanyProfiles(false) // Fetch all for "Ils recrutent actuellement"
   ]);
   
   const jobOffers = jobOffersData.data || [];

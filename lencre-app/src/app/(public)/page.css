@@ -125,7 +125,7 @@
 .home__griot-grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--space-lg);
+  gap: var(--space-md);
 }
 
 .home__griot-card-image {
@@ -150,14 +150,18 @@
 .home__main-grid {
   display: grid;
   grid-template-columns: 2fr 1fr;
-  gap: var(--space-xl);
-  margin-bottom: var(--space-xl);
+  gap: var(--space-lg);
+  margin-bottom: var(--space-lg);
 }
 
 .home__main-sidebar {
   display: flex;
   flex-direction: column;
-  gap: var(--space-lg);
+  gap: var(--space-md);
+}
+
+.home__main-hero {
+  height: auto;
 }
 
 .home__main-sidebar .article-card {
@@ -167,7 +171,7 @@
 .home__main-row {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--space-lg);
+  gap: var(--space-md);
 }
 
 /* Vidéo & Audio */

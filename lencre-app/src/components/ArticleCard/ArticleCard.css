@@ -7,7 +7,10 @@
   border-radius: var(--radius-lg);
   overflow: hidden;
   transition: all var(--transition-normal);
-  height: 100%;
+  height: auto;
+  min-height: min-content;
+  display: flex;
+  flex-direction: column;
 }
 
 .article-card:hover {
@@ -18,8 +21,8 @@
 .article-card__link {
   display: flex;
   flex-direction: column;
-  height: 100%;
   color: inherit;
+  width: 100%;
 }
 
 .article-card__link:hover {
@@ -34,7 +37,8 @@
   width: 100%;
   padding-top: 56.25%; /* 16:9 ratio */
   overflow: hidden;
-  background-color: #ddd;
+  background-color: #f0f0f0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
 }
 
 .article-card__image {
@@ -45,6 +49,7 @@
   height: 100%;
   object-fit: cover;
   transition: transform var(--transition-slow);
+  color: transparent; /* Hide broken image alt text if it overflows */
 }
 
 .article-card:hover .article-card__image {
@@ -70,11 +75,10 @@
    Contenu
    -------------------------------------------------------------------------- */
 .article-card__content {
-  padding: var(--space-md) var(--space-lg) var(--space-lg);
+  padding: var(--space-sm) var(--space-md) var(--space-md);
   display: flex;
   flex-direction: column;
-  flex: 1;
-  gap: var(--space-sm);
+  gap: var(--space-xs);
 }
 
 .article-card__title {
@@ -105,8 +109,8 @@
   justify-content: space-between;
   align-items: center;
   gap: var(--space-sm);
-  margin-top: auto;
-  padding-top: var(--space-sm);
+  margin-top: var(--space-sm);
+  padding-top: var(--space-xs);
   border-top: 1px solid rgba(0, 0, 0, 0.05);
   flex-wrap: wrap;
 }

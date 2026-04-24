@@ -5,6 +5,7 @@ import { useRouter, usePathname } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { isAuthenticated, getUser, logout } from '@/lib/auth';
+import NotificationBell from '@/components/admin/NotificationBell';
 import './admin.css';
 
 interface User {
@@ -109,17 +110,21 @@ export default function AdminLayout({ children }: { children: React.ReactNode })
             ☰
           </button>
 
-          <div className="admin__topbar-user">
-            <div className="admin__topbar-avatar">
-              {user.name.substring(0, 2).toUpperCase()}
+          <div className="admin__topbar-right" style={{ display: 'flex', alignItems: 'center' }}>
+            <NotificationBell />
+            
+            <div className="admin__topbar-user">
+              <div className="admin__topbar-avatar">
+                {user.name.substring(0, 2).toUpperCase()}
+              </div>
+              <div className="admin__topbar-info">
+                <span className="admin__topbar-name">{user.name}</span>
+                <span className="admin__topbar-role">{user.role || 'Admin'}</span>
+              </div>
+              <button onClick={handleLogout} className="admin__topbar-logout" title="Déconnexion">
+                ⏻
+              </button>
             </div>
-            <div className="admin__topbar-info">
-              <span className="admin__topbar-name">{user.name}</span>
-              <span className="admin__topbar-role">{user.role || 'Admin'}</span>
-            </div>
-            <button onClick={handleLogout} className="admin__topbar-logout" title="Déconnexion">
-              ⏻
-            </button>
           </div>
         </header>
 

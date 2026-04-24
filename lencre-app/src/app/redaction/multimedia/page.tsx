@@ -56,7 +56,7 @@ export default function RedactionMultimediaPage() {
   const getStatusBadge = (status: string) => {
     switch(status) {
       case 'published': return <span className="cms-badge cms-badge--published">Publié</span>;
-      case 'pending_review': return <span className="cms-badge" style={{background:'#eef2ff', color:'#4f46e5'}}>En attente</span>;
+      case 'review_pending': return <span className="cms-badge" style={{background:'#eef2ff', color:'#4f46e5'}}>En attente</span>;
       case 'rejected': return <span className="cms-badge" style={{background:'#fef2f2', color:'#ef4444'}}>Rejeté</span>;
       default: return <span className="cms-badge cms-badge--draft">Brouillon</span>;
     }
@@ -103,7 +103,7 @@ export default function RedactionMultimediaPage() {
                 </td>
                 <td>
                   <div className="cms-table__actions">
-                    {!['published', 'pending_review'].includes(item.status) && (
+                    {!['published', 'review_pending'].includes(item.status) && (
                       <>
                         <Link href={`/redaction/multimedia/${item.id}/edit`} className="cms-btn cms-btn--secondary cms-btn--sm">
                           ✏️ Modifier
@@ -116,7 +116,7 @@ export default function RedactionMultimediaPage() {
                         </button>
                       </>
                     )}
-                    {['published', 'pending_review'].includes(item.status) && (
+                    {['published', 'review_pending'].includes(item.status) && (
                       <span style={{ fontSize: '0.8rem', color: '#888' }}>
                         {item.status === 'published' ? 'Publié ✓' : 'En relecture...'}
                       </span>

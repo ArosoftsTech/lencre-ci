@@ -121,36 +121,34 @@ export default function HeroCarousel({ slides, trends }: HeroCarouselProps) {
             </div>
           </div>
 
-          {/* ====== Sidebar Tendances avec miniatures ====== */}
+          {/* ====== Sidebar "Essentiel de l'actu" (Timeline) ====== */}
           <aside className="hero-carousel__sidebar">
             <div className="hero-carousel__sidebar-header">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="hero-carousel__trend-icon">
-                <polyline points="23 6 13.5 15.5 8.5 10.5 1 18" />
-                <polyline points="17 6 23 6 23 12" />
+              <h3>Essentiel de l'actu</h3>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="hero-carousel__header-arrow">
+                <polyline points="9 18 15 12 9 6" />
               </svg>
-              <h3>Actualités</h3>
             </div>
             <ul className="hero-carousel__trend-list">
-              {trends.slice(0, 4).map((trend) => (
-                <li key={trend.id} className="hero-carousel__trend-item">
-                  <Link href={`/${trend.category.slug}/${trend.slug}`} className="hero-carousel__trend-link">
-                    <div className="hero-carousel__trend-thumb">
-                      <Image
-                        src={trend.featured_image}
-                        alt={trend.title}
-                        width={80}
-                        height={56}
-                        className="hero-carousel__trend-thumb-img"
-                        sizes="80px"
-                      />
-                    </div>
-                    <div className="hero-carousel__trend-info">
-                      <h4 className="hero-carousel__trend-title">{trend.title}</h4>
-                      <span className="hero-carousel__trend-meta">{trend.category.name}</span>
-                    </div>
-                  </Link>
-                </li>
-              ))}
+              {trends.slice(0, 5).map((trend) => {
+                const date = new Date(trend.published_at || (trend as any).created_at);
+                const hours = String(date.getHours()).padStart(2, '0');
+                const minutes = String(date.getMinutes()).padStart(2, '0');
+                const time = `${hours}:${minutes}`;
+
+                return (
+                  <li key={trend.id} className="hero-carousel__trend-item">
+                    <Link href={`/${trend.category?.slug || 'actualite'}/${trend.slug}`} className="hero-carousel__trend-link">
+                      <div className="hero-carousel__trend-badge">
+                        {time}
+                      </div>
+                      <div className="hero-carousel__trend-info">
+                        <h4 className="hero-carousel__trend-title">{trend.title}</h4>
+                      </div>
+                    </Link>
+                  </li>
+                );
+              })}
             </ul>
           </aside>
         </div>

@@ -33,7 +33,10 @@ export function isAuthenticated(): boolean {
 export async function login(email: string, password: string): Promise<User> {
   const res = await fetch(`${API_URL}/auth/login`, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: { 
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    },
     body: JSON.stringify({ email, password }),
   });
 
@@ -56,6 +59,7 @@ export async function getUser(): Promise<User> {
     headers: {
       'Authorization': `Bearer ${token}`,
       'Content-Type': 'application/json',
+      'Accept': 'application/json',
     },
   });
 
@@ -77,6 +81,7 @@ export async function adminFetch(endpoint: string, options: RequestInit = {}): P
   const token = getToken();
   const headers: Record<string, string> = {
     'Authorization': `Bearer ${token}`,
+    'Accept': 'application/json',
     ...(options.headers as Record<string, string> || {}),
   };
 
@@ -95,6 +100,12 @@ export async function adminFetch(endpoint: string, options: RequestInit = {}): P
     if (typeof window !== 'undefined') {
       window.location.href = '/admin/login';
     }
+  }
+
+  if (res.status === 403) {
+    const errorData = await res.clone().json().catch(() => ({}));
+    console.error('Access Denied:', errorData.error || 'Accès refusé');
+    // We don't necessarily redirect on 403, as they are logged in but unauthorized for this action
   }
 
   return res;

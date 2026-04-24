@@ -76,6 +76,7 @@ export async function redactionFetch(endpoint: string, options: RequestInit = {}
   const token = getRedactionToken();
   const headers: Record<string, string> = {
     'Authorization': `Bearer ${token}`,
+    'Accept': 'application/json',
     ...(options.headers as Record<string, string> || {}),
   };
 

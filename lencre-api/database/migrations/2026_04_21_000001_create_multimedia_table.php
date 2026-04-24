@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('thumbnail')->nullable(); // URL miniature
             $table->string('duration')->nullable(); // ex: "12:05"
             $table->boolean('is_featured')->default(false);
-            $table->enum('status', ['draft', 'pending_review', 'published', 'rejected'])->default('draft');
+            $table->enum('status', ['draft', 'review_pending', 'published', 'rejected'])->default('draft');
             $table->unsignedInteger('views_count')->default(0);
             $table->foreignId('author_id')->constrained('users')->onDelete('cascade');
             $table->timestamp('published_at')->nullable();

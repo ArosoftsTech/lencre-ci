@@ -46,7 +46,7 @@ export default function RedactionArticlesPage() {
   const getStatusBadge = (status: string) => {
     switch(status) {
       case 'published': return <span className="cms-badge cms-badge--published">Publié</span>;
-      case 'pending_review': return <span className="cms-badge" style={{background:'#eef2ff', color:'#4f46e5'}}>En relecture Editoriale</span>;
+      case 'review_pending': return <span className="cms-badge" style={{background:'#eef2ff', color:'#4f46e5'}}>En relecture Editoriale</span>;
       case 'rejected': return <span className="cms-badge" style={{background:'#fef2f2', color:'#ef4444'}}>Refusé éditeur</span>;
       case 'edit_requested': return <span className="cms-badge" style={{background:'#fffbeb', color:'#d97706'}}>Révision requise</span>;
       default: return <span className="cms-badge cms-badge--draft">Brouillon</span>;
@@ -89,9 +89,9 @@ export default function RedactionArticlesPage() {
                 <td>
                   <div className="cms-table__actions">
                     <Link href={`/redaction/articles/${article.id}/edit`} className="cms-btn cms-btn--secondary cms-btn--sm">
-                      ✏️ {['published', 'pending_review'].includes(article.status) ? 'Voir' : 'Modifier'}
+                      ✏️ {['published', 'review_pending'].includes(article.status) ? 'Voir' : 'Modifier'}
                     </Link>
-                    {!['published', 'pending_review'].includes(article.status) && (
+                    {!['published', 'review_pending'].includes(article.status) && (
                       <button onClick={() => handleDelete(article.id, article.title)} className="cms-btn cms-btn--danger cms-btn--sm">
                         🗑️
                       </button>

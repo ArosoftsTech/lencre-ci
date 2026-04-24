@@ -4,8 +4,8 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import ImageExtension from '@tiptap/extension-image';
-import LinkExtension from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
+import Link from '@tiptap/extension-link';
 import { redactionFetch } from '@/lib/redactionAuth';
 
 interface Category {
@@ -22,45 +22,110 @@ function slugify(text: string): string {
     .replace(/(^-|-$)/g, '');
 }
 
+import ActionModal from './ActionModal';
+
 function EditorToolbar({ editor }: { editor: Editor | null }) {
+  const [modalConfig, setModalConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'input';
+    mode: 'image' | 'link';
+    defaultValue: string;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'input',
+    mode: 'image',
+    defaultValue: '',
+  });
+
   if (!editor) return null;
 
+  const handleOpenImagePrompt = () => {
+    setModalConfig({
+      isOpen: true,
+      title: 'Insérer une image',
+      message: 'Veuillez entrer l\'URL de l\'image :',
+      type: 'input',
+      mode: 'image',
+      defaultValue: '',
+    });
+  };
+
+  const handleOpenLinkPrompt = () => {
+    const previousUrl = editor.getAttributes('link').href || '';
+    setModalConfig({
+      isOpen: true,
+      title: 'Insérer un lien',
+      message: 'Veuillez entrer l\'URL du lien :',
+      type: 'input',
+      mode: 'link',
+      defaultValue: previousUrl,
+    });
+  };
+
+  const handleModalConfirm = (value?: string) => {
+    if (!value) {
+      setModalConfig(prev => ({ ...prev, isOpen: false }));
+      return;
+    }
+
+    if (modalConfig.mode === 'image') {
+      editor.chain().focus().setImage({ src: value }).run();
+    } else {
+      editor.chain().focus().extendMarkRange('link').setLink({ href: value }).run();
+    }
+
+    setModalConfig(prev => ({ ...prev, isOpen: false }));
+  };
+
   return (
-    <div className="tiptap-editor__toolbar">
-      <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'is-active' : ''} title="Gras">
-        <strong>B</strong>
-      </button>
-      <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'is-active' : ''} title="Italique">
-        <em>I</em>
-      </button>
-      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''} title="Titre H2">
-        H2
-      </button>
-      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''} title="Titre H3">
-        H3
-      </button>
-      <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} className={editor.isActive('bulletList') ? 'is-active' : ''} title="Liste à puces">
-        • Liste
-      </button>
-      <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} className={editor.isActive('orderedList') ? 'is-active' : ''} title="Liste numérotée">
-        1. Liste
-      </button>
-      <button type="button" onClick={() => editor.chain().focus().toggleBlockquote().run()} className={editor.isActive('blockquote') ? 'is-active' : ''} title="Citation">
-        ❝ Citation
-      </button>
-      <button type="button" onClick={() => {
-        const url = prompt('URL de l\'image (vous pouvez utiliser l\'URL d\'une image de votre médiathèque) :');
-        if (url) editor.chain().focus().setImage({ src: url }).run();
-      }} title="Insérer image">
-        🖼️ Image
-      </button>
-      <button type="button" onClick={() => {
-        const url = prompt('URL du lien :');
-        if (url) editor.chain().focus().setLink({ href: url }).run();
-      }} title="Insérer lien">
-        🔗 Lien
-      </button>
-    </div>
+    <>
+      <div className="tiptap-editor__toolbar">
+        <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'is-active' : ''} title="Gras">
+          <strong>B</strong>
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'is-active' : ''} title="Italique">
+          <em>I</em>
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''} title="Titre H2">
+          H2
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''} title="Titre H3">
+          H3
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} className={editor.isActive('bulletList') ? 'is-active' : ''} title="Liste à puces">
+          • Liste
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} className={editor.isActive('orderedList') ? 'is-active' : ''} title="Liste numérotée">
+          1. Liste
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleBlockquote().run()} className={editor.isActive('blockquote') ? 'is-active' : ''} title="Citation">
+          ❝ Citation
+        </button>
+        <button type="button" onClick={handleOpenImagePrompt} title="Insérer image">
+          🖼️ Image
+        </button>
+        <button type="button" onClick={handleOpenLinkPrompt} title="Insérer lien" className={editor.isActive('link') ? 'is-active' : ''}>
+          🔗 Lien
+        </button>
+      </div>
+
+      <ActionModal
+        isOpen={modalConfig.isOpen}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        type="input"
+        defaultValue={modalConfig.defaultValue}
+        placeholder="https://..."
+        confirmLabel="Insérer"
+        confirmColor="#3b82f6"
+        onConfirm={handleModalConfirm}
+        onCancel={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
+      />
+    </>
   );
 }
 
@@ -99,9 +164,20 @@ export default function RedactionArticleForm({ articleId }: ArticleFormProps) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
-      ImageExtension,
-      LinkExtension.configure({ openOnClick: false }),
+      StarterKit.configure(),
+      Image.configure({
+        HTMLAttributes: {
+          class: 'editor-image',
+        },
+      }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: 'editor-link',
+          target: '_blank',
+          rel: 'noopener noreferrer',
+        },
+      }),
     ],
     content: '',
     immediatelyRender: false,
@@ -166,7 +242,10 @@ export default function RedactionArticleForm({ articleId }: ArticleFormProps) {
       meta_title: metaTitle,
       meta_description: metaDescription,
       meta_keywords: metaKeywords.split(',').map(k => k.trim()).filter(k => k),
+      submit_for_review: submitForReview,
     };
+
+    console.log('Submitting article with body:', body);
 
     try {
       const method = articleId ? 'PUT' : 'POST';
@@ -178,22 +257,9 @@ export default function RedactionArticleForm({ articleId }: ArticleFormProps) {
 
       if (!res.ok) {
         const err = await res.json();
-        alert(err.message || 'Erreur lors de la sauvegarde du brouillon');
+        alert(err.message || 'Erreur lors de la sauvegarde');
         setSaving(false);
         return;
-      }
-
-      const savedArticle = await res.json();
-      
-      if (submitForReview) {
-          const submitRes = await redactionFetch(`/redaction/articles/${savedArticle.id}/submit`, {
-              method: 'POST'
-          });
-          if (!submitRes.ok) {
-              alert('Le brouillon est sauvé, mais la soumission a échoué.');
-              setSaving(false);
-              return;
-          }
       }
 
       router.push('/redaction/articles');
@@ -222,7 +288,7 @@ export default function RedactionArticleForm({ articleId }: ArticleFormProps) {
     }
   };
   
-  const isLocked = ['published', 'pending_review', 'ai_review_pending'].includes(articleStatus);
+  const isLocked = ['published', 'review_pending', 'ai_review_pending'].includes(articleStatus);
 
   return (
     <form onSubmit={(e) => { e.preventDefault(); handleSubmit(false); }} className="cms-form">

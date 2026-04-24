@@ -16,46 +16,17 @@ use App\Http\Controllers\Api\Redaction\ProfileController as RedactionProfileCont
 Route::prefix('v1')->group(function () {
     // Auth Admin
     Route::group(['prefix' => 'auth'], function () {
-        Route::post('login', [AuthController::class, 'login']);
+        Route::post('login', [AuthController::class, 'login'])->name('login');
         Route::post('logout', [AuthController::class, 'logout'])->middleware(['auth:api', 'panel:admin']);
         Route::post('refresh', [AuthController::class, 'refresh'])->middleware(['auth:api', 'panel:admin']);
         Route::post('me', [AuthController::class, 'me'])->middleware(['auth:api', 'panel:admin']);
     });
 
-    // Categories (public)
-    Route::get('categories', [CategoryController::class, 'index']);
-    Route::get('categories/{slug}', [CategoryController::class, 'show']);
-
-    // Articles (public)
-    Route::get('articles/trending', [ArticleController::class, 'trending']);
-    Route::get('articles', [ArticleController::class, 'index']);
-    Route::get('articles/{slug}', [ArticleController::class, 'show']);
-    Route::post('articles/{id}/share', [ArticleController::class, 'incrementShare']);
-
-    // Job Offers (public)
-    Route::get('job-offers/stats', [JobOfferController::class, 'stats']);
-    Route::get('job-offers', [JobOfferController::class, 'index']);
-    Route::get('job-offers/{slug}', [JobOfferController::class, 'show']);
-
-    // Multimedia (public - liste)
-    Route::get('multimedia', [MultimediaController::class, 'index']);
-
-    // Multimedia admin GET routes (MUST be before {slug} to avoid route conflict)
-    Route::middleware(['auth:api', 'panel:admin'])->group(function () {
-        Route::get('multimedia/admin', [MultimediaController::class, 'adminIndex']);
-        Route::get('multimedia/admin/{id}', [MultimediaController::class, 'adminShow']);
-    });
-
-    // Multimedia (public - détail par slug, après les routes admin)
-    Route::get('multimedia/{slug}', [MultimediaController::class, 'show']);
-
-    // Company Profiles (public)
-    Route::get('company-profiles', [CompanyProfileController::class, 'index']);
-    Route::get('company-profiles/{slug}', [CompanyProfileController::class, 'show']);
 
     // --- Protected routes (CMS) ---
     Route::middleware(['auth:api', 'panel:admin'])->group(function () {
         // Articles CRUD
+        Route::get('articles/{id}', [ArticleController::class, 'showById']);
         Route::post('articles', [ArticleController::class, 'store']);
         Route::put('articles/{id}', [ArticleController::class, 'update']);
         Route::delete('articles/{id}', [ArticleController::class, 'destroy']);
@@ -121,6 +92,33 @@ Route::prefix('v1')->group(function () {
             ]);
         });
     });
+
+    // --- Public routes (After admin to avoid conflict) ---
+    
+    // Categories (public)
+    Route::get('categories', [CategoryController::class, 'index']);
+    Route::get('categories/{slug}', [CategoryController::class, 'show']);
+
+    // Articles (public)
+    Route::get('articles/trending', [ArticleController::class, 'trending']);
+    Route::get('articles', [ArticleController::class, 'index']);
+    Route::get('articles/{slug}', [ArticleController::class, 'show']);
+    Route::post('articles/{id}/share', [ArticleController::class, 'incrementShare']);
+
+    // Job Offers (public)
+    Route::get('job-offers/stats', [JobOfferController::class, 'stats']);
+    Route::get('job-offers', [JobOfferController::class, 'index']);
+    Route::get('job-offers/{slug}', [JobOfferController::class, 'show']);
+
+    // Multimedia (public - liste)
+    Route::get('multimedia', [MultimediaController::class, 'index']);
+
+    // Multimedia (public - détail par slug)
+    Route::get('multimedia/{slug}', [MultimediaController::class, 'show']);
+
+    // Company Profiles (public)
+    Route::get('company-profiles', [CompanyProfileController::class, 'index']);
+    Route::get('company-profiles/{slug}', [CompanyProfileController::class, 'show']);
 });
 
 
@@ -166,7 +164,7 @@ Route::prefix('v1/redaction')->group(function () {
                 ->count();
 
             $pendingCount = \App\Models\Article::where('author_id', $userId)
-                ->where('status', 'pending_review')
+                ->where('status', 'review_pending')
                 ->count();
 
             $publishedCount = \App\Models\Article::where('author_id', $userId)

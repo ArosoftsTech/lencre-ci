@@ -27,10 +27,12 @@ class AuthController extends Controller
         $credentials = request(['email', 'password']);
 
         if (! $token = auth('api')->claims(['panel' => 'admin'])->attempt($credentials)) {
+            \Log::warning('Login attempt failed for Admin panel', ['email' => $credentials['email']]);
             return response()->json(['error' => 'Identifiants incorrects.'], 401);
         }
 
         $user = auth('api')->user();
+        \Log::info('Admin login successful', ['user_id' => $user->id, 'role' => $user->role]);
         $adminRoles = ['admin', 'super-admin', 'super_admin'];
         if (!in_array($user->role, $adminRoles)) {
             auth('api')->logout();

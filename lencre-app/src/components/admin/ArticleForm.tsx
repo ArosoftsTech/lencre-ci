@@ -4,8 +4,8 @@ import { useEffect, useState, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import { useEditor, EditorContent, Editor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import ImageExtension from '@tiptap/extension-image';
-import LinkExtension from '@tiptap/extension-link';
+import Image from '@tiptap/extension-image';
+import Link from '@tiptap/extension-link';
 import { adminFetch } from '@/lib/auth';
 
 interface Category {
@@ -22,45 +22,109 @@ function slugify(text: string): string {
     .replace(/(^-|-$)/g, '');
 }
 
+import ActionModal from './ActionModal';
+
 function EditorToolbar({ editor }: { editor: Editor | null }) {
+  const [modalConfig, setModalConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'input';
+    mode: 'image' | 'link';
+    defaultValue: string;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'input',
+    mode: 'image',
+    defaultValue: '',
+  });
+
   if (!editor) return null;
 
+  const handleOpenImagePrompt = () => {
+    setModalConfig({
+      isOpen: true,
+      title: 'Insérer une image',
+      message: 'Veuillez entrer l\'URL de l\'image :',
+      type: 'input',
+      mode: 'image',
+      defaultValue: '',
+    });
+  };
+
+  const handleOpenLinkPrompt = () => {
+    const previousUrl = editor.getAttributes('link').href || '';
+    setModalConfig({
+      isOpen: true,
+      title: 'Insérer un lien',
+      message: 'Veuillez entrer l\'URL du lien :',
+      type: 'input',
+      mode: 'link',
+      defaultValue: previousUrl,
+    });
+  };
+
+  const handleModalConfirm = (value?: string) => {
+    if (!value) {
+      setModalConfig(prev => ({ ...prev, isOpen: false }));
+      return;
+    }
+
+    if (modalConfig.mode === 'image') {
+      editor.chain().focus().setImage({ src: value }).run();
+    } else {
+      editor.chain().focus().extendMarkRange('link').setLink({ href: value }).run();
+    }
+
+    setModalConfig(prev => ({ ...prev, isOpen: false }));
+  };
+
   return (
-    <div className="tiptap-editor__toolbar">
-      <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'is-active' : ''} title="Gras">
-        <strong>B</strong>
-      </button>
-      <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'is-active' : ''} title="Italique">
-        <em>I</em>
-      </button>
-      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''} title="Titre H2">
-        H2
-      </button>
-      <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''} title="Titre H3">
-        H3
-      </button>
-      <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} className={editor.isActive('bulletList') ? 'is-active' : ''} title="Liste à puces">
-        • Liste
-      </button>
-      <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} className={editor.isActive('orderedList') ? 'is-active' : ''} title="Liste numérotée">
-        1. Liste
-      </button>
-      <button type="button" onClick={() => editor.chain().focus().toggleBlockquote().run()} className={editor.isActive('blockquote') ? 'is-active' : ''} title="Citation">
-        ❝ Citation
-      </button>
-      <button type="button" onClick={() => {
-        const url = prompt('URL de l\'image :');
-        if (url) editor.chain().focus().setImage({ src: url }).run();
-      }} title="Insérer image">
-        🖼️ Image
-      </button>
-      <button type="button" onClick={() => {
-        const url = prompt('URL du lien :');
-        if (url) editor.chain().focus().setLink({ href: url }).run();
-      }} title="Insérer lien">
-        🔗 Lien
-      </button>
-    </div>
+    <>
+      <div className="tiptap-editor__toolbar">
+        <button type="button" onClick={() => editor.chain().focus().toggleBold().run()} className={editor.isActive('bold') ? 'is-active' : ''} title="Gras">
+          <strong>B</strong>
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleItalic().run()} className={editor.isActive('italic') ? 'is-active' : ''} title="Italique">
+          <em>I</em>
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 2 }).run()} className={editor.isActive('heading', { level: 2 }) ? 'is-active' : ''} title="Titre H2">
+          H2
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleHeading({ level: 3 }).run()} className={editor.isActive('heading', { level: 3 }) ? 'is-active' : ''} title="Titre H3">
+          H3
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleBulletList().run()} className={editor.isActive('bulletList') ? 'is-active' : ''} title="Liste à puces">
+          • Liste
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleOrderedList().run()} className={editor.isActive('orderedList') ? 'is-active' : ''} title="Liste numérotée">
+          1. Liste
+        </button>
+        <button type="button" onClick={() => editor.chain().focus().toggleBlockquote().run()} className={editor.isActive('blockquote') ? 'is-active' : ''} title="Citation">
+          ❝ Citation
+        </button>
+        <button type="button" onClick={handleOpenImagePrompt} title="Insérer image">
+          🖼️ Image
+        </button>
+        <button type="button" onClick={handleOpenLinkPrompt} title="Insérer lien" className={editor.isActive('link') ? 'is-active' : ''}>
+          🔗 Lien
+        </button>
+      </div>
+
+      <ActionModal
+        isOpen={modalConfig.isOpen}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        type="input"
+        defaultValue={modalConfig.defaultValue}
+        placeholder="https://..."
+        confirmLabel="Insérer"
+        onConfirm={handleModalConfirm}
+        onCancel={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
+      />
+    </>
   );
 }
 
@@ -83,36 +147,67 @@ export default function ArticleForm({ articleId }: ArticleFormProps) {
 
   const editor = useEditor({
     extensions: [
-      StarterKit,
-      ImageExtension,
-      LinkExtension.configure({ openOnClick: false }),
+      StarterKit.configure(),
+      Image.configure({
+        HTMLAttributes: {
+          class: 'editor-image',
+        },
+      }),
+      Link.configure({
+        openOnClick: false,
+        HTMLAttributes: {
+          class: 'editor-link',
+          target: '_blank',
+          rel: 'noopener noreferrer',
+        },
+      }),
     ],
     content: '',
     immediatelyRender: false,
   });
+
+  const [isLoading, setIsLoading] = useState(!!articleId);
 
   useEffect(() => {
     // Load categories
     adminFetch('/categories')
       .then(r => r.json())
       .then(setCategories)
-      .catch(console.error);
+      .catch(err => console.error('Failed to load categories:', err));
+  }, []);
 
+  useEffect(() => {
     // Load article if editing
-    if (articleId) {
+    if (articleId && editor) {
+      setIsLoading(true);
       adminFetch(`/articles/${articleId}`)
-        .then(r => r.json())
-        .then(article => {
-          setTitle(article.title);
-          setSlug(article.slug);
-          setExcerpt(article.excerpt || '');
-          setCategoryId(String(article.category_id));
-          setFeaturedImage(article.featured_image || '');
-          setIsTrending(article.is_trending);
-          setIsUrgent(article.is_urgent);
-          if (editor) editor.commands.setContent(article.content || '');
+        .then(async (r) => {
+          if (!r.ok) throw new Error('Article non trouvé');
+          return r.json();
         })
-        .catch(console.error);
+        .then(article => {
+          setTitle(article.title || '');
+          setSlug(article.slug || '');
+          setExcerpt(article.excerpt || '');
+          setCategoryId(String(article.category_id || ''));
+          setFeaturedImage(article.featured_image || '');
+          setIsTrending(!!article.is_trending);
+          setIsUrgent(!!article.is_urgent);
+          
+          // Set editor content
+          if (article.content) {
+            editor.commands.setContent(article.content);
+          }
+          
+          setAutoSlug(false);
+        })
+        .catch(err => {
+          console.error('Failed to load article:', err);
+          alert('Impossible de charger l\'article. Il a peut-être été supprimé.');
+        })
+        .finally(() => {
+          setIsLoading(false);
+        });
     }
   }, [articleId, editor]);
 
@@ -176,6 +271,14 @@ export default function ArticleForm({ articleId }: ArticleFormProps) {
       console.error(err);
     }
   };
+
+  if (isLoading) {
+    return (
+      <div className="cms-loading-container" style={{ padding: '2rem', textAlign: 'center' }}>
+        <p>Chargement des données de l'article...</p>
+      </div>
+    );
+  }
 
   return (
     <form onSubmit={handleSubmit} className="cms-form">

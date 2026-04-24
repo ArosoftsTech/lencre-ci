@@ -43,6 +43,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'i.ytimg.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'i.pinimg.com',
+      },
       /* 
        * AJOUTER ICI VOTRE DOMAINE DE PRODUCTION POUR LES IMAGES 
        * Exemple: { protocol: 'https', hostname: 'api.lencre.ci' }

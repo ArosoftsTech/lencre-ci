@@ -51,9 +51,16 @@ class ArticleController extends Controller
         ]);
 
         $validated['author_id'] = $user->id;
-        $validated['status'] = 'draft';
+        
+        $submitForReview = $request->boolean('submit_for_review');
+        \Log::info('Storing article from redaction', ['submit_for_review' => $submitForReview]);
+        
+        $articleData = array_merge($validated, [
+            'author_id' => $user->id,
+            'status' => $submitForReview ? 'review_pending' : 'draft'
+        ]);
 
-        $article = Article::create($validated);
+        $article = Article::create($articleData);
 
         ArticleVersion::create([
             'article_id' => $article->id,
@@ -63,7 +70,7 @@ class ArticleController extends Controller
 
         ActivityLog::create([
             'user_id' => $user->id,
-            'action' => 'article_created_draft',
+            'action' => $submitForReview ? 'article_submitted' : 'article_created_draft',
             'subject_type' => get_class($article),
             'subject_id' => $article->id,
         ]);
@@ -94,8 +101,15 @@ class ArticleController extends Controller
             'credit_photo' => 'nullable|string',
         ]);
 
-        // Retourne automatiquement en statut brouillon après correction
-        $validated['status'] = 'draft';
+        $submitForReview = $request->boolean('submit_for_review');
+        \Log::info('Updating article from redaction', ['article_id' => $id, 'submit_for_review' => $submitForReview]);
+        
+        if ($submitForReview) {
+            $validated['status'] = 'review_pending';
+        } else {
+            // Retourne automatiquement en statut brouillon après correction si on ne soumet pas explicitement
+            $validated['status'] = 'draft';
+        }
 
         $article->update($validated);
 
@@ -107,7 +121,7 @@ class ArticleController extends Controller
 
         ActivityLog::create([
             'user_id' => $user->id,
-            'action' => 'article_updated',
+            'action' => $submitForReview ? 'article_submitted' : 'article_updated',
             'subject_type' => get_class($article),
             'subject_id' => $article->id,
         ]);
@@ -124,7 +138,7 @@ class ArticleController extends Controller
             return response()->json(['error' => 'Action impossible, article déjà soumis ou en mauvaise posture.'], 403);
         }
 
-        $article->update(['status' => 'pending_review']);
+        $article->update(['status' => 'review_pending']);
 
         ActivityLog::create([
             'user_id' => $user->id,

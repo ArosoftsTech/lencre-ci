@@ -17,7 +17,7 @@ export default function CompanyForm({ initialData, isEdit }: CompanyFormProps) {
     description: initialData?.description || '',
     website: initialData?.website || '',
     sector: initialData?.sector || '',
-    is_featured: initialData?.is_featured || false,
+    is_featured: initialData?.is_featured !== undefined ? initialData.is_featured : true,
     sort_order: initialData?.sort_order || 0,
   });
 

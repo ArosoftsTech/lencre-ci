@@ -44,6 +44,12 @@ class ArticleController extends Controller
         return response()->json($article);
     }
 
+    public function showById($id)
+    {
+        $article = Article::with(['category', 'author'])->findOrFail($id);
+        return response()->json($article);
+    }
+
     public function trending()
     {
         $articles = Article::with(['category', 'author'])
@@ -89,6 +95,7 @@ class ArticleController extends Controller
             'is_urgent' => 'boolean',
             'is_published' => 'boolean',
             'category_id' => 'sometimes|required|exists:categories,id',
+            'status' => 'sometimes|required|string|in:draft,review_pending,published,rejected,edit_requested,scheduled',
         ]);
 
         if (isset($validated['is_published'])) {

@@ -122,7 +122,7 @@ class MultimediaController extends Controller
             ->whereIn('status', ['draft', 'rejected'])
             ->findOrFail($id);
 
-        $media->update(['status' => 'pending_review']);
+        $media->update(['status' => 'review_pending']);
 
         return response()->json(['message' => 'Média soumis pour validation', 'media' => $media]);
     }

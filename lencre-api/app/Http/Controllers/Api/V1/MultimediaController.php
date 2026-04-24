@@ -101,7 +101,7 @@ class MultimediaController extends Controller
             'thumbnail' => 'nullable|string|max:500',
             'duration' => 'nullable|string|max:20',
             'is_featured' => 'boolean',
-            'status' => 'in:draft,published',
+            'status' => 'in:draft,review_pending,published,rejected',
         ]);
 
         $validated['slug'] = Str::slug($validated['title']) . '-' . Str::random(5);
@@ -144,7 +144,7 @@ class MultimediaController extends Controller
             'thumbnail' => 'nullable|string|max:500',
             'duration' => 'nullable|string|max:20',
             'is_featured' => 'boolean',
-            'status' => 'in:draft,published',
+            'status' => 'in:draft,review_pending,published,rejected',
         ]);
 
         // Si l'URL externe change, re-générer l'embed

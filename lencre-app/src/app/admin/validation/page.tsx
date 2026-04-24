@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { adminFetch } from '@/lib/auth';
+import ActionModal from '@/components/admin/ActionModal';
 
 interface Article {
   id: number;
@@ -19,6 +20,23 @@ export default function AdminValidationPage() {
   const [loading, setLoading] = useState(true);
   const [processingId, setProcessingId] = useState<number | null>(null);
 
+  // Modal State
+  const [modalConfig, setModalConfig] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    type: 'confirm' | 'prompt' | 'textarea';
+    action: 'validate' | 'reject' | 'request-revision' | null;
+    article: Article | null;
+  }>({
+    isOpen: false,
+    title: '',
+    message: '',
+    type: 'confirm',
+    action: null,
+    article: null,
+  });
+
   useEffect(() => {
     loadPendingArticles();
   }, []);
@@ -26,7 +44,7 @@ export default function AdminValidationPage() {
   const loadPendingArticles = async (isRefreshing = false) => {
     if (!isRefreshing) setLoading(true);
     try {
-      const res = await adminFetch('/articles?status=pending_review&per_page=50');
+      const res = await adminFetch('/articles?status=review_pending&per_page=50');
       const data = await res.json();
       setArticles(data.data || []);
     } catch (err) {
@@ -35,24 +53,41 @@ export default function AdminValidationPage() {
     setLoading(false);
   };
 
-  const handleAction = async (article: Article, action: 'validate' | 'reject' | 'request-revision') => {
-    let motif = '';
-    
-    if (action === 'reject') {
-      const input = prompt('Veuillez indiquer le motif du refus (ce mot sera transmis au rédacteur) :');
-      if (input === null) return;
-      if (!input.trim()) { alert('Le motif est obligatoire pour un refus.'); return; }
-      motif = input;
+  const openModal = (article: Article, action: 'validate' | 'reject' | 'request-revision') => {
+    let title = '';
+    let message = '';
+    let type: 'confirm' | 'prompt' = 'confirm';
+
+    if (action === 'validate') {
+      title = 'Publier l\'article';
+      message = `Êtes-vous sûr de vouloir publier l'article "${article.title}" immédiatement ?`;
+      type = 'confirm';
+    } else if (action === 'reject') {
+      title = 'Refuser l\'article';
+      message = 'Veuillez indiquer le motif du refus (ce mot sera transmis au rédacteur) :';
+      type = 'textarea';
     } else if (action === 'request-revision') {
-      const input = prompt('Veuillez indiquer les corrections attendues :');
-      if (input === null) return;
-      if (!input.trim()) { alert('Vous devez préciser les corrections attendues.'); return; }
-      motif = input;
-    } else if (action === 'validate') {
-      if (!confirm('Êtes-vous sûr de vouloir publier cet article immédiatement ?')) return;
+      title = 'Demander des corrections';
+      message = 'Veuillez indiquer les corrections attendues :';
+      type = 'textarea';
     }
 
+    setModalConfig({
+      isOpen: true,
+      title,
+      message,
+      type,
+      action,
+      article,
+    });
+  };
+
+  const executeAction = async (motif?: string) => {
+    const { article, action } = modalConfig;
+    if (!article || !action) return;
+
     setProcessingId(article.id);
+    setModalConfig(prev => ({ ...prev, isOpen: false }));
 
     try {
       const res = await adminFetch(`/articles/${article.id}/${action}`, {
@@ -121,7 +156,7 @@ export default function AdminValidationPage() {
                 <td>
                   <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
                     <button 
-                        onClick={() => handleAction(article, 'validate')} 
+                        onClick={() => openModal(article, 'validate')} 
                         disabled={processingId === article.id}
                         className="cms-btn" 
                         style={{ background: '#10b981', color: '#fff', padding: '0.35rem 0.65rem', fontSize: '0.8rem' }}
@@ -129,7 +164,7 @@ export default function AdminValidationPage() {
                       ✓ Publier
                     </button>
                     <button 
-                        onClick={() => handleAction(article, 'request-revision')} 
+                        onClick={() => openModal(article, 'request-revision')} 
                         disabled={processingId === article.id}
                         className="cms-btn" 
                         style={{ background: '#f59e0b', color: '#fff', padding: '0.35rem 0.65rem', fontSize: '0.8rem' }}
@@ -137,7 +172,7 @@ export default function AdminValidationPage() {
                       ✏️ Demander révision
                     </button>
                     <button 
-                        onClick={() => handleAction(article, 'reject')} 
+                        onClick={() => openModal(article, 'reject')} 
                         disabled={processingId === article.id}
                         className="cms-btn" 
                         style={{ background: '#ef4444', color: '#fff', padding: '0.35rem 0.65rem', fontSize: '0.8rem' }}
@@ -160,6 +195,18 @@ export default function AdminValidationPage() {
           </tbody>
         </table>
       </div>
+
+      <ActionModal
+        isOpen={modalConfig.isOpen}
+        title={modalConfig.title}
+        message={modalConfig.message}
+        type={modalConfig.type}
+        confirmLabel={modalConfig.action === 'validate' ? 'Publier' : 'Confirmer'}
+        confirmColor={modalConfig.action === 'validate' ? '#10b981' : (modalConfig.action === 'reject' ? '#ef4444' : '#f59e0b')}
+        onConfirm={executeAction}
+        onCancel={() => setModalConfig(prev => ({ ...prev, isOpen: false }))}
+        placeholder={modalConfig.action === 'reject' ? 'Motif du refus...' : 'Détails des corrections...'}
+      />
     </div>
   );
 }

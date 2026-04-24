@@ -19,6 +19,6 @@ return Application::configure(basePath: dirname(__DIR__))
         // CORS — Allow cross-origin requests from the frontend
         $middleware->append(\App\Http\Middleware\CorsMiddleware::class);
     })
-    ->withExceptions(function (Exceptions $exceptions): void {
-        //
+    ->withExceptions(function (Exceptions $exceptions) {
+        $exceptions->shouldRenderJsonWhen(fn ($request, $e) => $request->is('api/*'));
     })->create();

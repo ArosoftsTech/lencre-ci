@@ -61,7 +61,7 @@ export default function AdminMultimediaPage() {
   const getStatusBadge = (status: string) => {
     switch(status) {
       case 'published': return <span className="cms-badge cms-badge--published">Publié</span>;
-      case 'pending_review': return <span className="cms-badge" style={{background:'#eef2ff', color:'#4f46e5'}}>En attente</span>;
+      case 'review_pending': return <span className="cms-badge" style={{background:'#eef2ff', color:'#4f46e5'}}>En attente</span>;
       case 'rejected': return <span className="cms-badge" style={{background:'#fef2f2', color:'#ef4444'}}>Rejeté</span>;
       default: return <span className="cms-badge cms-badge--draft">Brouillon</span>;
     }
@@ -129,7 +129,7 @@ export default function AdminMultimediaPage() {
                     <Link href={`/admin/multimedia/${item.id}/edit`} className="cms-btn cms-btn--secondary cms-btn--sm">
                       ✏️ Modifier
                     </Link>
-                    {item.status === 'pending_review' && (
+                    {item.status === 'review_pending' && (
                       <button onClick={() => handleValidate(item.id)} className="cms-btn cms-btn--sm" style={{ background: '#22c55e', color: '#fff', border: 'none' }}>
                         ✓ Valider
                       </button>
