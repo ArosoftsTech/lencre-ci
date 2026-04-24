@@ -47,6 +47,10 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'i.pinimg.com',
       },
+      {
+        protocol: 'https',
+        hostname: 'www.lavieenrose.com',
+      },
       /* 
        * AJOUTER ICI VOTRE DOMAINE DE PRODUCTION POUR LES IMAGES 
        * Exemple: { protocol: 'https', hostname: 'api.lencre.ci' }

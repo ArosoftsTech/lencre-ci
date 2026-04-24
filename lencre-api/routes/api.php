@@ -26,7 +26,7 @@ Route::prefix('v1')->group(function () {
     // --- Protected routes (CMS) ---
     Route::middleware(['auth:api', 'panel:admin'])->group(function () {
         // Articles CRUD
-        Route::get('articles/{id}', [ArticleController::class, 'showById']);
+        Route::get('articles/{id}', [ArticleController::class, 'showById'])->where('id', '[0-9]+');
         Route::post('articles', [ArticleController::class, 'store']);
         Route::put('articles/{id}', [ArticleController::class, 'update']);
         Route::delete('articles/{id}', [ArticleController::class, 'destroy']);

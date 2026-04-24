@@ -323,6 +323,86 @@
   border: 1px solid #f1f5f9;
 }
 
+/* Appels d'offres Banner */
+.emploi-sidebar__tenders-wrapper {
+  padding: 0;
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  box-shadow: none;
+}
+
+.emploi-sidebar__tenders-link {
+  display: flex;
+  align-items: center;
+  background-color: #ffffff;
+  padding: var(--space-lg);
+  border-radius: var(--radius-lg);
+  text-decoration: none;
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  border-left: 4px solid var(--bleu-nuit, #1A237E);
+  border-top: 1px solid #f1f5f9;
+  border-right: 1px solid #f1f5f9;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.emploi-sidebar__tenders-link:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border-left-color: var(--rouge-profond, #C1121F);
+}
+
+.emploi-sidebar__tenders-icon {
+  background-color: rgba(26, 35, 126, 0.08);
+  color: var(--bleu-nuit, #1A237E);
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  margin-right: var(--space-md);
+  transition: color 0.3s ease, background-color 0.3s ease;
+}
+
+.emploi-sidebar__tenders-link:hover .emploi-sidebar__tenders-icon {
+  color: var(--rouge-profond, #C1121F);
+  background-color: rgba(193, 18, 31, 0.08);
+}
+
+.emploi-sidebar__tenders-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.emploi-sidebar__tenders-title {
+  font-weight: 800;
+  font-size: 1.15rem;
+  color: #333;
+  margin-bottom: 4px;
+}
+
+.emploi-sidebar__tenders-desc {
+  font-size: 0.85rem;
+  color: #666;
+  opacity: 0.9;
+}
+
+.emploi-sidebar__tenders-arrow {
+  color: #999;
+  transition: transform 0.3s ease, color 0.3s ease;
+  margin-left: var(--space-sm);
+}
+
+.emploi-sidebar__tenders-link:hover .emploi-sidebar__tenders-arrow {
+  transform: translateX(4px);
+  color: var(--rouge-profond, #C1121F);
+}
+
 .emploi-sidebar__title {
   font-family: var(--font-heading);
   font-weight: 700;
@@ -503,6 +583,172 @@
   padding: 2px 8px;
   border-radius: 12px;
   display: inline-block;
+}
+
+/* Card location */
+.emploi-card__location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--fs-xs);
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+
+/* Section filter badge & count */
+.emploi-section__filter-badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  background: #eef2ff;
+  color: var(--bleu-nuit);
+  padding: 2px 10px;
+  border-radius: 12px;
+  margin-left: 8px;
+  vertical-align: middle;
+}
+
+.emploi-section__count-badge {
+  font-size: var(--fs-sm);
+  color: var(--text-muted);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+/* Skeleton loader for filters */
+.emploi-filters-skeleton {
+  background: #f1f5f9;
+  border-radius: var(--radius-lg);
+  height: 220px;
+  margin-bottom: var(--space-2xl);
+  animation: pulse 1.5s ease infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* Empty state */
+.emploi-empty {
+  text-align: center;
+  padding: var(--space-3xl) var(--space-xl);
+  background: #f8fafc;
+  border-radius: var(--radius-lg);
+  border: 2px dashed #e2e8f0;
+}
+
+.emploi-empty__icon {
+  margin-bottom: var(--space-md);
+  color: #9ca3af;
+}
+
+.emploi-empty h3 {
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: var(--fs-lg);
+  color: var(--text-primary);
+  margin-bottom: var(--space-sm);
+}
+
+.emploi-empty p {
+  color: var(--text-muted);
+  font-size: var(--fs-sm);
+  max-width: 400px;
+  margin: 0 auto var(--space-lg);
+}
+
+.emploi-empty__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0.7rem 1.5rem;
+  background: var(--bleu-nuit);
+  color: #fff;
+  border-radius: var(--radius-md);
+  font-weight: 700;
+  font-size: var(--fs-sm);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.emploi-empty__btn:hover {
+  background: #0a1525;
+  transform: translateY(-1px);
+  color: #fff;
+}
+
+/* Pagination */
+.emploi-pagination {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-sm);
+  padding: var(--space-xl) 0;
+}
+
+.emploi-pagination__btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.6rem 1.2rem;
+  font-size: var(--fs-sm);
+  font-weight: 700;
+  color: var(--bleu-nuit);
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.emploi-pagination__btn:hover {
+  background: var(--bleu-nuit);
+  color: #fff;
+  border-color: var(--bleu-nuit);
+}
+
+.emploi-pagination__pages {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.emploi-pagination__page {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 38px;
+  height: 38px;
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--text-body);
+  background: #fff;
+  border: 1.5px solid #e2e8f0;
+  border-radius: var(--radius-md);
+  text-decoration: none;
+  transition: all var(--transition-fast);
+}
+
+.emploi-pagination__page:hover {
+  border-color: var(--bleu-nuit);
+  color: var(--bleu-nuit);
+}
+
+.emploi-pagination__page--active {
+  background: var(--bleu-nuit);
+  color: #fff;
+  border-color: var(--bleu-nuit);
+}
+
+.emploi-pagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  color: var(--text-muted);
 }
 
 /* Responsive */

@@ -124,7 +124,7 @@ export default function HeroCarousel({ slides, trends }: HeroCarouselProps) {
           {/* ====== Sidebar "Essentiel de l'actu" (Timeline) ====== */}
           <aside className="hero-carousel__sidebar">
             <div className="hero-carousel__sidebar-header">
-              <h3>Essentiel de l'actu</h3>
+              <h3>Essentiel de l&apos;actu</h3>
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" className="hero-carousel__header-arrow">
                 <polyline points="9 18 15 12 9 6" />
               </svg>

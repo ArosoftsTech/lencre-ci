@@ -1,0 +1,409 @@
+/* ==========================================================================
+   JobSearchForm — L'Encre
+   ========================================================================== */
+
+.job-search-form {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
+  margin-bottom: var(--space-2xl);
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow var(--transition-normal);
+}
+
+.job-search-form:focus-within {
+  box-shadow: var(--shadow-md);
+}
+
+/* --------------------------------------------------------------------------
+   Active Filters Tags
+   -------------------------------------------------------------------------- */
+.job-search-form__active-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: var(--space-lg);
+  padding-bottom: var(--space-md);
+  border-bottom: 1px solid #f1f5f9;
+  animation: fadeInDown 0.25s ease;
+}
+
+.job-search-form__active-label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.job-search-form__tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 12px;
+  border: none;
+  border-radius: 20px;
+  background: #eef2ff;
+  color: var(--bleu-nuit);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  animation: fadeInScale 0.2s ease;
+}
+
+.job-search-form__tag:hover {
+  background: #dbeafe;
+  transform: scale(1.03);
+}
+
+.job-search-form__tag-close {
+  font-size: 1rem;
+  line-height: 1;
+  opacity: 0.5;
+  transition: opacity var(--transition-fast);
+}
+
+.job-search-form__tag:hover .job-search-form__tag-close {
+  opacity: 1;
+  color: var(--rouge-profond);
+}
+
+.job-search-form__clear-all {
+  background: none;
+  border: none;
+  color: var(--rouge-profond);
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: all var(--transition-fast);
+}
+
+.job-search-form__clear-all:hover {
+  background: #fef2f2;
+  text-decoration: underline;
+}
+
+/* --------------------------------------------------------------------------
+   Selects Row
+   -------------------------------------------------------------------------- */
+.job-search-form__selects {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--space-md);
+  margin-bottom: var(--space-md);
+}
+
+.job-search-form__select-wrapper {
+  position: relative;
+}
+
+.job-search-form__select-wrapper select {
+  width: 100%;
+  padding: 0.8rem 2.5rem 0.8rem 1rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  color: var(--text-body);
+  background: #fff;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+  outline: none;
+  font-family: inherit;
+}
+
+.job-search-form__select-wrapper select:focus {
+  border-color: var(--bleu-nuit);
+  box-shadow: 0 0 0 3px rgba(29, 53, 87, 0.08);
+}
+
+.job-search-form__select-wrapper select:hover {
+  border-color: #9ca3af;
+}
+
+/* Active value highlight */
+.job-search-form__select-wrapper select:not(:has(option[value=""]:checked)) {
+  border-color: var(--bleu-nuit);
+  background: #f8faff;
+  font-weight: 600;
+}
+
+.job-search-form__chevron {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  pointer-events: none;
+  color: #9ca3af;
+  transition: color var(--transition-fast);
+}
+
+.job-search-form__select-wrapper:hover .job-search-form__chevron {
+  color: var(--bleu-nuit);
+}
+
+/* --------------------------------------------------------------------------
+   Text Inputs
+   -------------------------------------------------------------------------- */
+.job-search-form__inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
+}
+
+.job-search-form__input-wrapper {
+  position: relative;
+}
+
+.job-search-form__input-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9ca3af;
+  pointer-events: none;
+  transition: color var(--transition-fast);
+}
+
+.job-search-form__input-wrapper:focus-within .job-search-form__input-icon {
+  color: var(--bleu-nuit);
+}
+
+.job-search-form__input-wrapper input {
+  width: 100%;
+  padding: 0.8rem 1rem 0.8rem 2.5rem;
+  border: 1.5px solid #d1d5db;
+  border-radius: var(--radius-md);
+  font-size: 0.88rem;
+  color: var(--text-body);
+  background: #fff;
+  transition: all var(--transition-fast);
+  outline: none;
+  font-family: inherit;
+}
+
+.job-search-form__input-wrapper input:focus {
+  border-color: var(--bleu-nuit);
+  box-shadow: 0 0 0 3px rgba(29, 53, 87, 0.08);
+}
+
+.job-search-form__input-wrapper input:hover {
+  border-color: #9ca3af;
+}
+
+.job-search-form__input-wrapper input::placeholder {
+  color: #9ca3af;
+}
+
+/* --------------------------------------------------------------------------
+   Actions Row
+   -------------------------------------------------------------------------- */
+.job-search-form__actions {
+  display: block;
+  width: 100%;
+}
+
+.job-search-form__action-group {
+  text-align: center;
+}
+
+.job-search-form__btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  width: 100%;
+  padding: 0.9rem 1.5rem;
+  font-family: var(--font-heading);
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-align: center;
+  border-radius: var(--radius-md);
+  border: 2px solid transparent;
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  position: relative;
+  overflow: hidden;
+}
+
+.job-search-form__btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.15);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width 0.4s ease, height 0.4s ease;
+}
+
+.job-search-form__btn:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* Primary (Rechercher) */
+.job-search-form__btn--primary {
+  background: var(--bleu-nuit);
+  color: #fff;
+  border-color: var(--bleu-nuit);
+}
+
+.job-search-form__btn--primary:hover {
+  background: #0a1525;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 27, 42, 0.3);
+}
+
+.job-search-form__btn--primary:active {
+  transform: translateY(0);
+}
+
+.job-search-form__btn--primary:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Secondary (Inscription) */
+.job-search-form__btn--secondary {
+  background: var(--rouge-profond);
+  color: #fff;
+  border-color: var(--rouge-profond);
+}
+
+.job-search-form__btn--secondary:hover {
+  background: #a80f1a;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(193, 18, 31, 0.3);
+}
+
+/* Outline (Poster) */
+.job-search-form__btn--outline {
+  background: transparent;
+  color: var(--bleu-nuit);
+  border-color: var(--bleu-nuit);
+}
+
+.job-search-form__btn--outline:hover {
+  background: var(--bleu-nuit);
+  color: #fff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(13, 27, 42, 0.2);
+}
+
+/* Hints and Reset */
+.job-search-form__hint {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+.job-search-form__reset-link {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  font-size: 0.75rem;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-top: 4px;
+  padding: 0;
+  transition: color var(--transition-fast);
+}
+
+.job-search-form__reset-link:hover {
+  color: var(--rouge-profond);
+}
+
+.job-search-form__result-count {
+  font-size: 0.78rem;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+
+.job-search-form__result-count strong {
+  color: var(--bleu-nuit);
+  font-weight: 800;
+  font-size: 0.85rem;
+}
+
+/* Spinner */
+.job-search-form__spinner {
+  width: 16px;
+  height: 16px;
+  border: 2.5px solid rgba(255, 255, 255, 0.3);
+  border-top-color: #fff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+/* --------------------------------------------------------------------------
+   Animations
+   -------------------------------------------------------------------------- */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* --------------------------------------------------------------------------
+   Responsive
+   -------------------------------------------------------------------------- */
+@media (max-width: 1024px) {
+  .job-search-form__selects {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+
+}
+
+@media (max-width: 768px) {
+  .job-search-form {
+    padding: var(--space-lg);
+  }
+
+  .job-search-form__selects {
+    grid-template-columns: 1fr;
+  }
+
+  .job-search-form__inputs {
+    grid-template-columns: 1fr;
+  }
+
+  .job-search-form__actions {
+    grid-template-columns: 1fr;
+  }
+}

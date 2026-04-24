@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
+import { Suspense } from 'react';
 import { getJobOffers, getCompanyProfiles } from '@/lib/api';
+import JobSearchForm from '@/components/JobSearchForm/JobSearchForm';
 import './page.css';
 
 const sidebarLinks = [
@@ -32,11 +34,28 @@ export default async function EtudeEmploiPage({
       date_range,
       page: page ? parseInt(page) : 1
     }),
-    getCompanyProfiles(false) // Fetch all for "Ils recrutent actuellement"
+    getCompanyProfiles(false)
   ]);
   
   const jobOffers = jobOffersData.data || [];
   const totalOffers = jobOffersData.total || 0;
+  const currentPage = jobOffersData.current_page || 1;
+  const lastPage = jobOffersData.last_page || 1;
+
+  // Build pagination URL helper
+  const buildPageUrl = (pageNum: number) => {
+    const params = new URLSearchParams();
+    if (sector) params.set('sector', sector);
+    if (education_level) params.set('education_level', education_level);
+    if (type) params.set('type', type);
+    if (search) params.set('search', search);
+    if (date_range) params.set('date_range', date_range);
+    params.set('page', pageNum.toString());
+    return `/etude-emploi?${params.toString()}`;
+  };
+
+  // Check if filters are active
+  const hasFilters = sector || education_level || type || search || date_range;
 
   return (
     <div className="emploi-page">
@@ -54,128 +73,165 @@ export default async function EtudeEmploiPage({
         </div>
       </section>
 
-      {/* ═══ FILTRES ═══ */}
+      {/* ═══ FILTRES (interactive) ═══ */}
       <div className="container">
-        <div className="emploi-filters">
-          <div className="emploi-filters__grid">
-            <select aria-label="Secteur d'activité">
-              <option>-- Secteur d&apos;activité --</option>
-              <option>BTP / Architecture</option>
-              <option>Banque / Finance</option>
-              <option>Commerce / Vente</option>
-              <option>Informatique / Telecom</option>
-              <option>RH / Formation</option>
-              <option>Transport / Logistique</option>
-            </select>
-            <select aria-label="Niveau d'études">
-              <option>-- Niveau d&apos;études --</option>
-              <option>BAC</option>
-              <option>BAC+2 / BTS / DUT</option>
-              <option>BAC+3 / Licence</option>
-              <option>BAC+4 / Maîtrise</option>
-              <option>BAC+5 et plus</option>
-            </select>
-            <select aria-label="Date de publication">
-              <option>-- Date de publication --</option>
-              <option>Aujourd&apos;hui</option>
-              <option>Cette semaine</option>
-              <option>Ce mois</option>
-            </select>
-            <select aria-label="Type d'offres">
-              <option>-- Type d&apos;offres --</option>
-              <option>Emploi</option>
-              <option>Stage</option>
-              <option>Freelance</option>
-              <option>Consultance</option>
-            </select>
-          </div>
-          <div className="emploi-filters__input-row">
-            <input type="text" placeholder="Recherche par mots-clés" aria-label="Recherche par mots-clés" />
-            <input type="text" placeholder="Recherche par codes" aria-label="Recherche par codes" />
-          </div>
-          <div className="emploi-filters__actions">
-            <div>
-              <button className="emploi-filters__btn emploi-filters__btn--secondary">
-                Inscrivez-vous gratuitement
-              </button>
-              <p className="emploi-filters__hint">Vous êtes candidat ? Recevez les offres par e-mail.</p>
-            </div>
-            <div>
-              <button className="emploi-filters__btn emploi-filters__btn--primary">
-                Rechercher
-              </button>
-            </div>
-            <div>
-              <button className="emploi-filters__btn emploi-filters__btn--outline">
-                Poster une offre
-              </button>
-              <p className="emploi-filters__hint">Vous êtes recruteur ? Publiez vos offres ici.</p>
-            </div>
-          </div>
-        </div>
+        <Suspense fallback={<div className="emploi-filters-skeleton" />}>
+          <JobSearchForm totalOffers={totalOffers} />
+        </Suspense>
 
         {/* ═══ CONTENU PRINCIPAL ═══ */}
         <div className="emploi-layout">
           {/* ─── Offres ─── */}
           <div>
             <div className="emploi-section__title">
-              <span>Offres d&apos;emploi</span>
-              <Link href="#" className="emploi-section__link">
-                Voir plus →
-              </Link>
+              <span>
+                Offres d&apos;emploi
+                {hasFilters && <span className="emploi-section__filter-badge">Filtrées</span>}
+              </span>
+              {totalOffers > 0 && (
+                <span className="emploi-section__count-badge">{totalOffers} résultat{totalOffers > 1 ? 's' : ''}</span>
+              )}
             </div>
 
-            <div className="emploi-grid">
-              {jobOffers.map((job: any) => (
-                <article key={job.id} className="emploi-card">
-                  <Link href={`/etude-emploi/${job.slug}`} className="emploi-card__link">
-                    <div className="emploi-card__image">
-                      <Image
-                        src={job.featured_image || 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80&w=400'}
-                        alt={job.title}
-                        width={400}
-                        height={250}
-                        unoptimized
-                        style={{ objectFit: 'cover', width: '100%', height: '100%' }}
-                      />
-                      <div className="emploi-card__type-badge">
-                        <span className="badge" style={{ backgroundColor: job.type === 'stage' ? '#2A9D8F' : job.type === 'freelance' ? '#F59E0B' : job.type === 'consultance' ? '#6366F1' : '#C1121F' }}>
-                          {job.type.toUpperCase()}
-                        </span>
-                      </div>
-                    </div>
-                    <div className="emploi-card__content">
-                      <h3 className="emploi-card__title">{job.title}</h3>
-                      <div className="emploi-card__company">{job.company_name}</div>
-                      <div className="emploi-card__meta">
-                        <div className="emploi-card__meta-row">
-                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                            <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
-                            <line x1="16" y1="2" x2="16" y2="6" />
-                            <line x1="8" y1="2" x2="8" y2="6" />
-                            <line x1="3" y1="10" x2="21" y2="10" />
-                          </svg>
-                          <span>Publié le : <strong>{new Date(job.published_at || job.created_at).toLocaleDateString('fr-FR')}</strong></span>
+            {jobOffers.length > 0 ? (
+              <div className="emploi-grid">
+                {jobOffers.map((job: any) => (
+                  <article key={job.id} className="emploi-card">
+                    <Link href={`/etude-emploi/${job.slug}`} className="emploi-card__link">
+                      <div className="emploi-card__image">
+                        <Image
+                          src={job.featured_image || 'https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80&w=400'}
+                          alt={job.title}
+                          width={400}
+                          height={250}
+                          unoptimized
+                          style={{ objectFit: 'cover', width: '100%', height: '100%' }}
+                        />
+                        <div className="emploi-card__type-badge">
+                          <span className="badge" style={{ backgroundColor: job.type === 'stage' ? '#2A9D8F' : job.type === 'freelance' ? '#F59E0B' : job.type === 'consultance' ? '#6366F1' : '#C1121F' }}>
+                            {job.type.toUpperCase()}
+                          </span>
                         </div>
-                        {job.deadline_at && (
-                          <div className="emploi-card__meta-row">
-                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                              <circle cx="12" cy="12" r="10" />
-                              <polyline points="12 6 12 12 16 14" />
+                      </div>
+                      <div className="emploi-card__content">
+                        <h3 className="emploi-card__title">{job.title}</h3>
+                        <div className="emploi-card__company">{job.company_name}</div>
+                        {job.location && (
+                          <div className="emploi-card__location">
+                            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                              <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" />
+                              <circle cx="12" cy="10" r="3" />
                             </svg>
-                            <span>Date limite : <strong className="emploi-card__deadline">{new Date(job.deadline_at).toLocaleDateString('fr-FR')}</strong></span>
+                            {job.location}
                           </div>
                         )}
+                        <div className="emploi-card__meta">
+                          <div className="emploi-card__meta-row">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                              <rect x="3" y="4" width="18" height="18" rx="2" ry="2" />
+                              <line x1="16" y1="2" x2="16" y2="6" />
+                              <line x1="8" y1="2" x2="8" y2="6" />
+                              <line x1="3" y1="10" x2="21" y2="10" />
+                            </svg>
+                            <span>Publié le : <strong>{new Date(job.published_at || job.created_at).toLocaleDateString('fr-FR')}</strong></span>
+                          </div>
+                          {job.deadline_at && (
+                            <div className="emploi-card__meta-row">
+                              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                                <circle cx="12" cy="12" r="10" />
+                                <polyline points="12 6 12 12 16 14" />
+                              </svg>
+                              <span>Date limite : <strong className="emploi-card__deadline">{new Date(job.deadline_at).toLocaleDateString('fr-FR')}</strong></span>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                    </div>
+                    </Link>
+                  </article>
+                ))}
+              </div>
+            ) : (
+              <div className="emploi-empty">
+                <div className="emploi-empty__icon">
+                  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                    <circle cx="11" cy="11" r="8" />
+                    <line x1="21" y1="21" x2="16.65" y2="16.65" />
+                    <line x1="8" y1="11" x2="14" y2="11" />
+                  </svg>
+                </div>
+                <h3>Aucune offre trouvée</h3>
+                <p>Essayez de modifier vos critères de recherche ou de supprimer certains filtres.</p>
+                <Link href="/etude-emploi" className="emploi-empty__btn">
+                  Voir toutes les offres
+                </Link>
+              </div>
+            )}
+
+            {/* Pagination */}
+            {lastPage > 1 && (
+              <nav className="emploi-pagination" aria-label="Pagination des offres">
+                {currentPage > 1 && (
+                  <Link href={buildPageUrl(currentPage - 1)} className="emploi-pagination__btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="15 18 9 12 15 6" />
+                    </svg>
+                    Précédent
                   </Link>
-                </article>
-              ))}
-            </div>
+                )}
+                <div className="emploi-pagination__pages">
+                  {Array.from({ length: lastPage }, (_, i) => i + 1)
+                    .filter(p => p === 1 || p === lastPage || Math.abs(p - currentPage) <= 2)
+                    .map((p, idx, arr) => {
+                      const showEllipsis = idx > 0 && p - arr[idx - 1] > 1;
+                      return (
+                        <span key={p}>
+                          {showEllipsis && <span className="emploi-pagination__ellipsis">…</span>}
+                          <Link
+                            href={buildPageUrl(p)}
+                            className={`emploi-pagination__page ${p === currentPage ? 'emploi-pagination__page--active' : ''}`}
+                          >
+                            {p}
+                          </Link>
+                        </span>
+                      );
+                    })}
+                </div>
+                {currentPage < lastPage && (
+                  <Link href={buildPageUrl(currentPage + 1)} className="emploi-pagination__btn">
+                    Suivant
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                      <polyline points="9 18 15 12 9 6" />
+                    </svg>
+                  </Link>
+                )}
+              </nav>
+            )}
           </div>
 
           {/* ─── Sidebar ─── */}
           <aside className="emploi-sidebar">
+            {/* Appels d'offres */}
+            <div className="emploi-sidebar__section emploi-sidebar__tenders-wrapper">
+              <Link href="/appels-offres" className="emploi-sidebar__tenders-link">
+                <div className="emploi-sidebar__tenders-icon">
+                  <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path>
+                    <polyline points="14 2 14 8 20 8"></polyline>
+                    <line x1="16" y1="13" x2="8" y2="13"></line>
+                    <line x1="16" y1="17" x2="8" y2="17"></line>
+                    <polyline points="10 9 9 9 8 9"></polyline>
+                  </svg>
+                </div>
+                <div className="emploi-sidebar__tenders-info">
+                  <span className="emploi-sidebar__tenders-title">Appels d&apos;offres</span>
+                  <span className="emploi-sidebar__tenders-desc">Consultez les opportunités</span>
+                </div>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="emploi-sidebar__tenders-arrow">
+                  <polyline points="9 18 15 12 9 6" />
+                </svg>
+              </Link>
+            </div>
+
             {/* Voir plus (Ressources) */}
             <div className="emploi-sidebar__section">
               <h3 className="emploi-sidebar__title">Voir plus</h3>
