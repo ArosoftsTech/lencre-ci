@@ -56,7 +56,7 @@ export default function AdminValidationPage() {
   const openModal = (article: Article, action: 'validate' | 'reject' | 'request-revision') => {
     let title = '';
     let message = '';
-    let type: 'confirm' | 'prompt' = 'confirm';
+    let type: 'confirm' | 'prompt' | 'textarea' = 'confirm';
 
     if (action === 'validate') {
       title = 'Publier l\'article';

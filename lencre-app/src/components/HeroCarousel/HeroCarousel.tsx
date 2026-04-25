@@ -23,6 +23,8 @@ interface TrendItem {
   slug: string;
   featured_image: string;
   category: { name: string; slug: string };
+  published_at?: string;
+  created_at?: string;
 }
 
 interface HeroCarouselProps {
@@ -131,7 +133,7 @@ export default function HeroCarousel({ slides, trends }: HeroCarouselProps) {
             </div>
             <ul className="hero-carousel__trend-list">
               {trends.slice(0, 5).map((trend) => {
-                const date = new Date(trend.published_at || (trend as any).created_at);
+                const date = new Date(trend.published_at || trend.created_at || new Date().toISOString());
                 const hours = String(date.getHours()).padStart(2, '0');
                 const minutes = String(date.getMinutes()).padStart(2, '0');
                 const time = `${hours}:${minutes}`;
