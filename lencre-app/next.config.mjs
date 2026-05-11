@@ -1,5 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   images: {
     // Allow placeholder images from picsum.photos and local/production API
     remotePatterns: [
